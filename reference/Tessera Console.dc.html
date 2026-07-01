@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  *{margin:0;box-sizing:border-box}
+  body{margin:0;background:#0b1410}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  @keyframes ts-spin{to{transform:rotate(360deg)}}
+  @keyframes ts-pulse{0%,100%{opacity:1}50%{opacity:0.45}}
+  @keyframes ts-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="width:100vw;height:100vh;display:flex;background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;overflow:hidden">
+
+  <aside style="width:252px;flex-shrink:0;background:#0e1712;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:24px 18px">
+    <div style="display:flex;align-items:center;gap:11px;padding:4px 8px 28px">
+      <div style="display:grid;grid-template-columns:repeat(2,9px);grid-template-rows:repeat(2,9px);gap:3px"><div style="background:#2fd08a"></div><div style="border:1px solid #2c4a3c"></div><div style="border:1px solid #2c4a3c"></div><div style="background:#2fd08a"></div></div>
+      <span style="font-size:19px;font-weight:600;letter-spacing:-0.01em">Tessera</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#6f8a7e;border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:2px 5px;margin-left:2px">CONSOLE</span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+        <button onClick="{{ n.onClick }}" style="{{ n.rowStyle }}">
+          <span style="{{ n.dotStyle }}"></span>
+          <span style="{{ n.labelStyle }}">{{ n.label }}</span>
+          <sc-if value="{{ n.done }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;color:#2fd08a;font-size:13px;font-family:'JetBrains Mono',monospace">&check;</span></sc-if>
+        </button>
+      </sc-for>
+    </nav>
+    <div style="margin-top:auto;padding:14px;background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:10px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#6f8a7e;margin-bottom:7px">ENGINE</div>
+      <div style="font-size:14px;color:#cdddd4;line-height:1.4">{{ engineLabel }}</div>
+      <div style="display:flex;align-items:center;gap:7px;margin-top:11px"><span style="width:7px;height:7px;border-radius:50%;background:#2fd08a"></span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9fb3a9">files stay in-browser</span></div>
+    </div>
+  </aside>
+
+  <main style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <header style="height:62px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 30px">
+      <div style="display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#9fb3a9"><span style="color:#6f8a7e">tessera</span><span style="color:#3a4a42">/</span><span style="color:#eaf2ee">{{ crumb }}</span></div>
+      <div style="display:flex;align-items:center;gap:18px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#2fd08a;box-shadow:0 0 0 4px rgba(47,208,138,0.15)"></span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#9fb3a9">LIVE</span></div>
+        <button onClick="{{ onReset }}" style="background:transparent;border:1px solid rgba(255,255,255,0.14);color:#9fb3a9;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.05em;padding:8px 14px;border-radius:7px;cursor:pointer">RESET</button>
+      </div>
+    </header>
+
+    <div style="flex:1;overflow-y:auto;padding:34px 40px 60px">
+
+      <!-- ===================== DATA LAKE ===================== -->
+      <sc-if value="{{ isLake }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px">
+            <div>
+              <h1 style="font-size:34px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px">Data lake</h1>
+              <p style="font-size:16px;color:#9fb3a9;margin:0">{{ lakeSub }}</p>
+            </div>
+            <sc-if value="{{ showIngestBtn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ ingestBtn.onClick }}" style="{{ ingestBtn.style }}">{{ ingestBtn.label }}</button></sc-if>
+          </div>
+
+          <div onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="{{ dropStyle }}">
+            <input type="file" id="tessera-file-input" multiple ref="{{ setFileInput }}" style="display:none" onChange="{{ onFiles }}" />
+            <div style="font-family:'JetBrains Mono',monospace;font-size:30px;color:#2fd08a;margin-bottom:14px">&#8615;</div>
+            <div style="font-size:19px;font-weight:600;margin-bottom:6px">Drop documents to ingest</div>
+            <div style="font-size:14px;color:#9fb3a9;max-width:520px;text-align:center;line-height:1.45">PDF, TXT, CSV, EML, JSON, HTML — or anything. Each file is read, classified, and its fields extracted on arrival.</div>
+            <div style="display:flex;gap:12px;margin-top:20px">
+              <button onClick="{{ onBrowse }}" style="background:#2fd08a;color:#06140e;border:none;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;letter-spacing:0.04em;padding:11px 20px;border-radius:8px;cursor:pointer">BROWSE FILES</button>
+              <button onClick="{{ onLoadSample }}" style="background:transparent;color:#cdddd4;border:1px solid rgba(255,255,255,0.16);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.04em;padding:11px 20px;border-radius:8px;cursor:pointer">LOAD SAMPLE SET</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ hasDocs }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0">
+                <sc-for list="{{ lakeStats }}" as="s" hint-placeholder-count="4">
+                  <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px 22px">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;letter-spacing:-0.01em;color:{{ s.color }}">{{ s.value }}</div>
+                    <div style="font-size:14px;color:#9fb3a9;margin-top:6px">{{ s.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ showChips }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px">
+                  <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+                    <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:14px">
+                <sc-for list="{{ docs }}" as="d" hint-placeholder-count="6">
+                  <div style="{{ d.tileStyle }}">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#eaf2ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.name }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f8a7e">{{ d.source }}</div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:2px;min-height:22px">
+                      <sc-if value="{{ d.isQueued }}" hint-placeholder-val="{{ true }}"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f8a7e">queued</span></sc-if>
+                      <sc-if value="{{ d.isClassifying }}" hint-placeholder-val="{{ false }}"><span style="width:11px;height:11px;border:2px solid rgba(47,208,138,0.3);border-top-color:#2fd08a;border-radius:50%;animation:ts-spin 0.7s linear infinite"></span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#2fd08a">reading…</span></sc-if>
+                      <sc-if value="{{ d.isDone }}" hint-placeholder-val="{{ false }}"><span style="{{ d.pillStyle }}">{{ d.pillLabel }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f8a7e">{{ d.metaLabel }}</span></sc-if>
+                    </div>
+                    <sc-if value="{{ d.showExtract }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9fb3a9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-top:1px solid rgba(255,255,255,0.06);padding-top:7px;margin-top:1px">{{ d.extractLine }}</div></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===================== RECONCILIATION ===================== -->
+      <sc-if value="{{ isRecon }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ reconReady }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px">
+              <div>
+                <h1 style="font-size:34px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px">Reconciliation</h1>
+                <p style="font-size:16px;color:#9fb3a9;margin:0">Three-way match · purchase order &rarr; goods received &rarr; invoice, grouped by PO reference</p>
+              </div>
+              <button onClick="{{ reconBtn.onClick }}" style="{{ reconBtn.style }}">{{ reconBtn.label }}</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px">
+              <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px 22px"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#2fd08a">{{ reconSummary.matched }}</div><div style="font-size:14px;color:#9fb3a9;margin-top:6px">matched &amp; cleared</div></div>
+              <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px 22px"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#f5b942">{{ reconSummary.exceptions }}</div><div style="font-size:14px;color:#9fb3a9;margin-top:6px">exceptions flagged</div></div>
+              <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px 22px"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#f2685f">{{ reconSummary.risk }}</div><div style="font-size:14px;color:#9fb3a9;margin-top:6px">value at risk surfaced</div></div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ txns }}" as="t" hint-placeholder-count="4">
+                <div style="{{ t.cardStyle }}">
+                  <div onClick="{{ t.onClick }}" style="{{ t.headStyle }}">
+                    <div style="display:flex;align-items:center;gap:16px;min-width:0">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#9fb3a9">{{ t.ref }}</span>
+                      <span style="font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.vendor }}</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6f8a7e">{{ t.country }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+                      <span style="{{ t.pillStyle }}">{{ t.pillLabel }}</span>
+                      <sc-if value="{{ t.canExpand }}" hint-placeholder-val="{{ false }}"><span style="{{ t.chevStyle }}">&rsaquo;</span></sc-if>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05);border-top:1px solid rgba(255,255,255,0.05)">
+                    <sc-for list="{{ t.cols }}" as="col" hint-placeholder-count="3">
+                      <div style="background:#101b15;padding:16px 20px">
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#6f8a7e;text-transform:uppercase;margin-bottom:8px">{{ col.label }}</div>
+                        <div style="font-size:17px;font-weight:500;color:{{ col.color }}">{{ col.main }}</div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ col.subColor }};margin-top:4px">{{ col.sub }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ t.showDetail }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:20px 22px;border-top:1px solid rgba(245,185,66,0.2);background:rgba(245,185,66,0.04);animation:ts-rise 0.2s ease">
+                      <div style="display:flex;gap:30px;flex-wrap:wrap">
+                        <div style="flex:1;min-width:320px">
+                          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#f5b942;margin-bottom:8px">WHAT WE FOUND</div>
+                          <div style="font-size:16px;color:#eaf2ee;line-height:1.5;margin-bottom:16px">{{ t.detail.body }}</div>
+                          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#2fd08a;margin-bottom:8px">RECOMMENDED ACTION</div>
+                          <div style="font-size:16px;color:#cdddd4;line-height:1.5">{{ t.detail.action }}</div>
+                        </div>
+                        <div style="width:260px;flex-shrink:0">
+                          <div style="background:#16291f;border:1px solid rgba(242,104,95,0.3);border-radius:10px;padding:16px 18px;margin-bottom:14px"><div style="font-size:13px;color:#9fb3a9">Value at risk</div><div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:#f2685f;margin-top:4px">{{ t.detail.impact }}</div></div>
+                          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#6f8a7e;margin-bottom:8px">EVIDENCE</div>
+                          <sc-for list="{{ t.detail.sources }}" as="src" hint-placeholder-count="2">
+                            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9fb3a9;padding:5px 0;display:flex;align-items:center;gap:8px"><span style="color:#2fd08a">&#9633;</span>{{ src }}</div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ reconEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px">
+            <div style="width:52px;height:52px;border-radius:14px;background:#122019;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:24px;color:#6f8a7e;margin-bottom:22px">&#9647;</div>
+            <h2 style="font-size:26px;font-weight:600;margin:0 0 10px">Ingest some documents first</h2>
+            <p style="font-size:16px;color:#9fb3a9;margin:0 0 26px;max-width:460px">Reconciliation runs on classified documents. Upload or load a sample set, run ingestion, then return to match the lifecycle.</p>
+            <button onClick="{{ onGoIngest }}" style="background:#2fd08a;color:#06140e;border:none;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;letter-spacing:0.04em;padding:13px 22px;border-radius:9px;cursor:pointer">GO TO DATA LAKE &rarr;</button>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- ===================== INSIGHTS ===================== -->
+      <sc-if value="{{ isInsights }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ insightsReady }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="margin-bottom:26px">
+              <h1 style="font-size:34px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px">Insights</h1>
+              <p style="font-size:16px;color:#9fb3a9;margin:0">For procurement &amp; finance · generated from your reconciled documents</p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:26px">
+              <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="6">
+                <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:18px 18px">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;letter-spacing:-0.01em;color:{{ k.color }}">{{ k.value }}</div>
+                  <div style="font-size:13px;color:#9fb3a9;margin-top:6px;line-height:1.3">{{ k.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:20px;margin-bottom:24px">
+              <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px 26px">
+                <div style="font-size:18px;font-weight:600;margin-bottom:22px">Value at risk by exception type</div>
+                <sc-if value="{{ hasRisk }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;flex-direction:column;gap:16px">
+                    <sc-for list="{{ riskBars }}" as="b" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:13px">
+                        <span style="width:150px;color:#cdddd4;flex-shrink:0">{{ b.label }}</span>
+                        <span style="height:16px;border-radius:4px;background:#f2685f;width:{{ b.width }}"></span>
+                        <span style="color:#9fb3a9">{{ b.disp }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ noRisk }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;color:#9fb3a9;padding:8px 0">No value at risk — everything reconciled cleanly.</div></sc-if>
+              </div>
+              <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px 26px">
+                <div style="font-size:18px;font-weight:600;margin-bottom:22px">Document mix</div>
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <sc-for list="{{ mixBars }}" as="m" hint-placeholder-count="5">
+                    <div style="display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:13px">
+                      <span style="width:130px;color:#cdddd4;flex-shrink:0">{{ m.label }}</span>
+                      <span style="height:16px;border-radius:4px;background:{{ m.color }};width:{{ m.width }}"></span>
+                      <span style="color:#9fb3a9">{{ m.val }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#122019;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px 26px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+                <div style="font-size:18px;font-weight:600">Action queue</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6f8a7e">prioritised by value at risk</div>
+              </div>
+              <sc-if value="{{ hasActions }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ actions }}" as="a" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:20px;padding:15px 0;border-top:1px solid rgba(255,255,255,0.06)">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:500;color:#f2685f;width:84px;flex-shrink:0">{{ a.impact }}</span>
+                      <span style="{{ a.tagStyle }}">{{ a.tag }}</span>
+                      <span style="font-size:15px;color:#eaf2ee;flex:1;min-width:0">{{ a.text }}</span>
+                      <span style="font-size:14px;color:#9fb3a9;flex-shrink:0">{{ a.vendor }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noActions }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;color:#9fb3a9;padding:6px 0">No open actions — all documents cleared.</div></sc-if>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ insightsEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px">
+            <div style="width:52px;height:52px;border-radius:14px;background:#122019;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:24px;color:#6f8a7e;margin-bottom:22px">&#9650;</div>
+            <h2 style="font-size:26px;font-weight:600;margin:0 0 10px">Run reconciliation to unlock insights</h2>
+            <p style="font-size:16px;color:#9fb3a9;margin:0 0 26px;max-width:460px">Insights are generated from matched documents and surfaced exceptions. Complete the three-way match first.</p>
+            <button onClick="{{ onGoRecon }}" style="background:#2fd08a;color:#06140e;border:none;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;letter-spacing:0.04em;padding:13px 22px;border-radius:9px;cursor:pointer">GO TO RECONCILIATION &rarr;</button>
+          </div>
+        </sc-if>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#0b1410"/><g transform="translate(35,35)"><rect x="0" y="0" width="13" height="13" rx="2" fill="#2fd08a"/><rect x="17" y="0" width="13" height="13" rx="2" fill="none" stroke="#2c4a3c" stroke-width="2"/><rect x="0" y="17" width="13" height="13" rx="2" fill="none" stroke="#2c4a3c" stroke-width="2"/><rect x="17" y="17" width="13" height="13" rx="2" fill="#2fd08a"/></g></svg>
+</template></x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view:'lake', docs:[], ingestRunning:false, reconcileRunning:false, reconcileIdx:0, reconcileDone:false, filter:'all', expanded:null, dragOver:false, selected:null };
+
+  constructor(props) {
+    super(props);
+    this._files = new Map();
+    this._nextId = 1;
+    this.SAMPLE = this.buildSample();
+  }
+
+  componentDidMount() {
+    if (window.pdfjsLib) {
+      try { window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e){}
+    }
+  }
+  componentWillUnmount() { clearInterval(this._rt); }
+
+  // ---------- sample documents (baked fields, run through the same UI) ----------
+  buildSample() {
+    const T = [
+      { ref:'4471', vendor:'Rhein Components GmbH', country:'Germany', cur:'EUR', po:84200, qty:4000, inv:84200, invno:'77310', grn:'full', result:'matched' },
+      { ref:'4472', vendor:'Aurora Logistics', country:'Brazil', cur:'BRL', po:312000, qty:600, inv:343200, invno:'5521-BR', grn:'full', result:'price' },
+      { ref:'4473', vendor:'Bharat Steelworks', country:'India', cur:'USD', po:128400, qty:4000, recv:3600, inv:128400, invno:'90244', grn:'short', result:'short' },
+      { ref:'4474', vendor:'Pacific Freight Co', country:'Singapore', cur:'SGD', po:56800, qty:120, inv:56800, invno:'88231', grn:'full', dup:true, result:'duplicate' },
+      { ref:'4475', vendor:'Continental Tooling', country:'United States', cur:'USD', po:73500, qty:300, inv:73500, invno:'10567', grn:'missing', result:'missing_grn' },
+      { ref:'4476', vendor:'Lyon Métaux SA', country:'France', cur:'EUR', po:null, qty:null, inv:45900, invno:'FR-2208', grn:'none', result:'missing_po' },
+      { ref:'4477', vendor:'Rhein Components GmbH', country:'Germany', cur:'EUR', po:19750, qty:500, inv:19750, invno:'77410', grn:'full', result:'matched' },
+      { ref:'4478', vendor:'Andes Mining Supply', country:'Chile', cur:'USD', po:204000, qty:1500, inv:204000, invno:'CL-3390', grn:'full', result:'matched' }
+    ];
+    const docs = [];
+    const mk = (name, source, type, conf, fields) => docs.push({ name, source, type, conf, fields });
+    T.forEach(t => {
+      if (t.result !== 'missing_po') mk(`PO-${t.ref}.pdf`, 'edi-feed', 'po', 0.97, { vendor:t.vendor, country:t.country, currency:t.cur, docId:'PO-'+t.ref, poRef:'PO-'+t.ref, total:t.po, qty:t.qty, summary:'Purchase order' });
+      if (t.grn === 'full') mk(`goods_receipt_${t.ref}.pdf`, 'sftp-drop', 'grn', 0.95, { vendor:t.vendor, country:t.country, currency:t.cur, docId:'GRN-'+t.ref, poRef:'PO-'+t.ref, total:null, qty:t.qty, summary:'Goods received in full' });
+      if (t.grn === 'short') mk(`goods_receipt_${t.ref}.pdf`, 'sftp-drop', 'grn', 0.90, { vendor:t.vendor, country:t.country, currency:t.cur, docId:'GRN-'+t.ref, poRef:'PO-'+t.ref, total:null, qty:t.recv, summary:'Short delivery' });
+      mk(`INV-${t.invno}.pdf`, 'email-gateway', 'invoice', 0.96, { vendor:t.vendor, country:t.country, currency:t.cur, docId:'INV-'+t.invno, poRef:'PO-'+t.ref, total:t.inv, qty:null, summary:'Supplier invoice' });
+      if (t.dup) mk(`INV-${t.invno}_copy.pdf`, 'scan-batch', 'invoice', 0.93, { vendor:t.vendor, country:t.country, currency:t.cur, docId:'INV-'+t.invno, poRef:'PO-'+t.ref, total:t.inv, qty:null, summary:'Duplicate submission' });
+    });
+    [['BR','4472'],['IN','4473'],['SG','4474'],['CL','4478']].forEach(c => mk(`customs_decl_${c[0]}_${c[1]}.pdf`, 'sftp-drop', 'customs', 0.85, { vendor:null, country:null, currency:null, docId:'CUS-'+c[1], poRef:'PO-'+c[1], total:null, qty:null, summary:'Customs declaration' }));
+    [['RE_ payment_query.eml','email-gateway'],['out_of_office.eml','email-gateway'],['logistics_weekly.html','email-gateway'],['verify_account_login.eml','email-gateway'],['DSC_4419.jpg','scan-batch'],['holiday_notice.pdf','sftp-drop']].forEach(j => mk(j[0], j[1], 'junk', 0.97, { summary:'Not a procurement document' }));
+    return docs;
+  }
+
+  // ---------- file intake ----------
+  setFileInput(el) { this._fileInput = el; }
+  onBrowse() { (this._fileInput || document.getElementById('tessera-file-input'))?.click(); }
+  onFiles(e) { this.addFiles(e.target.files); e.target.value = ''; }
+  onDragOver(e) { e.preventDefault(); if (!this.state.dragOver) this.setState({ dragOver:true }); }
+  onDragLeave(e) { e.preventDefault(); this.setState({ dragOver:false }); }
+  onDrop(e) { e.preventDefault(); this.setState({ dragOver:false }); this.addFiles(e.dataTransfer.files); }
+
+  addFiles(fileList) {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    const add = files.map(f => {
+      const id = this._nextId++;
+      this._files.set(id, f);
+      const ext = (f.name.split('.').pop() || 'file').toLowerCase();
+      return { id, name:f.name, source:`${ext} · ${this.fsize(f.size)}`, synthetic:false, status:'queued', type:null, confidence:0, fields:{}, isJunk:false, needsReview:false };
+    });
+    this.setState(s => ({ docs:[...s.docs, ...add], reconcileDone:false, reconcileIdx:0, expanded:null }));
+  }
+
+  onLoadSample() {
+    const add = this.SAMPLE.map(d => ({ id:this._nextId++, name:d.name, source:d.source, synthetic:true, sampleType:d.type, sampleConf:d.conf, sampleFields:d.fields, status:'queued', type:null, confidence:0, fields:{}, isJunk:false, needsReview:false }));
+    this.setState(s => ({ docs:[...s.docs, ...add], reconcileDone:false, reconcileIdx:0, expanded:null }));
+  }
+
+  fsize(b) { if (!b && b !== 0) return ''; if (b < 1024) return b + ' B'; if (b < 1048576) return (b/1024).toFixed(0) + ' KB'; return (b/1048576).toFixed(1) + ' MB'; }
+  delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+  updateDoc(id, patch) { this.setState(s => ({ docs: s.docs.map(d => d.id === id ? { ...d, ...patch } : d) })); }
+  setSelected(id) { this.setState({ selected: id }); }
+
+  explain(type, f, name) {
+    f = f || {};
+    const tn = { po:'a purchase order', invoice:'an invoice', grn:'a goods-received note', customs:'a customs declaration', junk:'not a procurement document' }[type] || 'a document';
+    const kw = { po:'purchase-order language', invoice:'invoice / amount-due language', grn:'goods-received / delivery-note language', customs:'customs-declaration language', junk:'email / notice language' }[type];
+    const signals = [];
+    if (kw) signals.push('Document language indicates ' + kw);
+    if (f.docId) signals.push('Document ID detected: ' + f.docId);
+    if (f.poRef) signals.push('References purchase order ' + f.poRef);
+    if (f.vendor) signals.push('Vendor named: ' + f.vendor);
+    if (f.total != null) signals.push('Monetary total present: ' + this.money(f.currency, f.total));
+    if (f.qty != null) signals.push('Quantity present: ' + Number(f.qty).toLocaleString() + ' units');
+    if (/\.(png|jpe?g|gif|webp|bmp|tiff?|heic|svg)$/i.test(name || '')) signals.push('No extractable text — inferred from filename');
+    if (!signals.length) signals.push('Filename and content cues: ' + (name || 'document'));
+    const reasoning = 'Classified as ' + tn + ' from its layout and key fields' + (f.poRef ? ', and linked to ' + f.poRef + ' for reconciliation' : '') + '.';
+    return { reasoning, signals };
+  }
+
+  // ---------- ingestion ----------
+  async runIngest() {
+    if (this._running) return;
+    this._running = true; this.setState({ ingestRunning:true });
+    const queue = this.state.docs.filter(d => d.status === 'queued');
+    for (const doc of queue) {
+      this.updateDoc(doc.id, { status:'classifying' });
+      let res, excerpt = '';
+      try {
+        if (doc.synthetic) { await this.delay(150); res = { type:doc.sampleType, confidence:doc.sampleConf, fields:doc.sampleFields }; }
+        else { const text = await this.extractText(doc.id); excerpt = (text || '').replace(/\s+/g,' ').trim().slice(0, 700); res = await this.classify(doc.name, text); }
+      } catch (e) { res = { type:'junk', confidence:0.4, fields:{ summary:'Could not read file' } }; }
+      const isJunk = res.type === 'junk';
+      const needsReview = !isJunk && (res.confidence || 0) < 0.85;
+      let reasoning = res.reasoning, signals = res.signals;
+      if (!reasoning || !signals || !signals.length) { const ex = this.explain(res.type, res.fields || {}, doc.name); reasoning = reasoning || ex.reasoning; signals = (signals && signals.length) ? signals : ex.signals; }
+      this.updateDoc(doc.id, { status:'done', type:res.type, confidence:res.confidence, fields:res.fields || {}, isJunk, needsReview, reasoning, signals, excerpt });
+    }
+    this._running = false; this.setState({ ingestRunning:false });
+  }
+
+  async extractText(id) {
+    const file = this._files.get(id);
+    if (!file) return '';
+    const name = (file.name || '').toLowerCase();
+    if (/\.(txt|csv|tsv|json|eml|html?|md|xml|log|rtf|yaml|yml|ini)$/.test(name)) {
+      try { return (await file.text()).slice(0, 8000); } catch(e) { return ''; }
+    }
+    if (/\.pdf$/.test(name) && window.pdfjsLib) {
+      try {
+        const buf = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data:buf }).promise;
+        const pages = Math.min(pdf.numPages, 6); let out = '';
+        for (let i = 1; i <= pages; i++) { const pg = await pdf.getPage(i); const tc = await pg.getTextContent(); out += tc.items.map(it => it.str).join(' ') + '\n'; }
+        return out.slice(0, 8000);
+      } catch(e) { return ''; }
+    }
+    if (/\.(png|jpe?g|gif|webp|bmp|tiff?|heic|svg)$/.test(name)) return '';
+    try { const t = await file.text(); const printable = t.replace(/[^\x20-\x7E\s]/g,'').length / Math.max(t.length,1); return printable > 0.7 ? t.slice(0,8000) : ''; } catch(e) { return ''; }
+  }
+
+  // ---- Local LLM config (Gemma via Ollama by default) ----
+  // Override without editing code:  localStorage.tessera_llm_model='gemma2'  /  localStorage.tessera_llm_endpoint='http://localhost:1234/v1/chat/completions'
+  llmEndpoint() { try { return (localStorage.getItem('tessera_llm_endpoint') || '').trim() || 'http://localhost:11434/api/generate'; } catch(e) { return 'http://localhost:11434/api/generate'; } }
+  llmModel() { try { return (localStorage.getItem('tessera_llm_model') || '').trim() || 'gemma3'; } catch(e) { return 'gemma3'; } }
+
+  async classify(name, text) {
+    try { return await this.modelClassify(name, text); }
+    catch(e) { console.warn('[Tessera] local model unreachable — using keyword fallback. ' + (e && e.message ? e.message : e)); }
+    return this.heuristicClassify(name, text);
+  }
+
+  async modelClassify(name, text) {
+    const body = text && text.trim() ? text.slice(0, 6000) : '(no extractable text — likely a scanned image or binary file; infer the type from the filename only and set a low confidence)';
+    const prompt = 'You are a procurement document-intelligence engine for an accounts-payable team. Classify ONE document and extract its key fields.\n' +
+      'Respond with ONLY a single minified JSON object — no prose, no markdown fences. Schema:\n' +
+      '{"type":"purchase_order|invoice|goods_receipt|customs|junk","confidence":0-1,"vendor":string|null,"country":string|null,"currency":"ISO4217 code"|null,"doc_id":string|null,"po_reference":string|null,"total_amount":number|null,"quantity":number|null,"summary":"max 12 words","reasoning":"one sentence on why you chose this type","signals":["a concrete phrase or cue you found","another cue"]}\n' +
+      'Rules: "junk" = anything that is NOT a procurement document (personal/marketing email, spam, out-of-office, newsletter, photo, notice). "goods_receipt" = delivery note / GRN / packing list. po_reference is the purchase-order number the document relates to. total_amount is a plain number with no symbols or commas. signals must quote real evidence from the document text. Use null for any absent field.\n\n' +
+      'FILENAME: ' + name + '\nDOCUMENT TEXT:\n' + body;
+    const endpoint = this.llmEndpoint();
+    const isOpenAI = /\/(chat\/)?completions$/.test(endpoint) || /\/v1\b/.test(endpoint);
+    const payload = isOpenAI
+      ? { model: this.llmModel(), messages:[{ role:'user', content: prompt }], temperature:0.1, stream:false }
+      : { model: this.llmModel(), prompt: prompt, stream:false, format:'json', options:{ temperature:0.1 } };
+    const resp = await fetch(endpoint, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' from ' + endpoint);
+    const data = await resp.json();
+    const raw = isOpenAI ? (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) : data.response;
+    const j = this.parseJson(raw || '');
+    const map = { purchase_order:'po', invoice:'invoice', goods_receipt:'grn', customs:'customs', junk:'junk' };
+    const type = map[j.type] || 'junk';
+    return { type, confidence: typeof j.confidence === 'number' ? j.confidence : 0.8,
+      reasoning: j.reasoning || null, signals: Array.isArray(j.signals) ? j.signals.filter(Boolean).map(String) : null,
+      fields: { vendor:j.vendor||null, country:j.country||null, currency:j.currency||null, docId:j.doc_id||null, poRef:j.po_reference||null,
+        total: this.num(j.total_amount), qty: this.num(j.quantity), summary:j.summary||null } };
+  }
+
+  parseJson(raw) {
+    if (!raw) return { type:'junk', confidence:0.4 };
+    let s = String(raw).replace(/```json/gi,'').replace(/```/g,'').trim();
+    const a = s.indexOf('{'), b = s.lastIndexOf('}');
+    if (a >= 0 && b > a) s = s.slice(a, b+1);
+    try { return JSON.parse(s); } catch(e) { return { type:'junk', confidence:0.4 }; }
+  }
+  num(x) { if (typeof x === 'number') return x; if (x == null) return null; const n = parseFloat(String(x).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? null : n; }
+
+  heuristicClassify(name, text) {
+    const hay = ((name || '') + ' ' + (text || '')).toLowerCase();
+    const has = re => re.test(hay);
+    let type = 'junk', conf = 0.62;
+    if (has(/out of office|unsubscribe|newsletter|verify your|reset your password|meeting notes|holiday|\bspam\b|click here|^re:|\bre:\s/)) { type='junk'; conf=0.9; }
+    else if (has(/purchase order|p\.?\s?o\.?\s*(no|number|#|:)|order confirmation/)) { type='po'; conf=0.84; }
+    else if (has(/goods received|goods receipt|\bgrn\b|delivery note|packing list/)) { type='grn'; conf=0.84; }
+    else if (has(/customs|declaration|hs code|tariff|import duty|bill of lading/)) { type='customs'; conf=0.82; }
+    else if (has(/invoice|tax invoice|amount due|bill to|remittance|vat/)) { type='invoice'; conf=0.84; }
+    const fields = { vendor:null, country:null, currency:null, docId:null, poRef:null, total:null, qty:null, summary:null };
+    const txt = text || '';
+    const po = txt.match(/p\.?\s?o\.?[\s#:\-]*([A-Z0-9][A-Z0-9\-]{2,})/i) || txt.match(/purchase order[^A-Z0-9]{0,14}([A-Z0-9][A-Z0-9\-]{2,})/i);
+    if (po) fields.poRef = ('PO-' + po[1].replace(/^po-?/i,'')).toUpperCase();
+    const inv = txt.match(/invoice[\s#:\-]*(?:no\.?|number)?[\s:#]*([A-Z0-9][A-Z0-9\-]{2,})/i);
+    if (inv) fields.docId = inv[1].toUpperCase();
+    const sym = txt.match(/(€|£|R\$|S\$|\$|USD|EUR|GBP|BRL|SGD)/);
+    if (sym) { const m = { '€':'EUR','£':'GBP','R$':'BRL','S$':'SGD','$':'USD' }; fields.currency = m[sym[1]] || sym[1].toUpperCase(); }
+    const amounts = [...txt.matchAll(/(?:total|amount due|grand total|balance)[^0-9]{0,12}([0-9][0-9.,]{2,})/gi)].map(m => this.num(m[1])).filter(Boolean);
+    if (amounts.length) fields.total = Math.max(...amounts);
+    const qm = txt.match(/([0-9,]{1,9})\s*(units|pcs|pieces|qty|ea\b)/i);
+    if (qm) fields.qty = this.num(qm[1]);
+    fields.summary = type === 'junk' ? 'Not a procurement document' : 'Classified by keyword fallback';
+    return { type, confidence: conf, fields };
+  }
+
+  // ---------- reconciliation ----------
+  buildGroups() {
+    const done = this.state.docs.filter(d => d.status === 'done' && !d.isJunk);
+    const norm = s => (s || '').toString().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    const map = new Map(); let solo = 0;
+    done.forEach(d => {
+      let k = d.type === 'po' ? norm(d.fields.poRef || d.fields.docId) : norm(d.fields.poRef);
+      if (!k) k = '__solo_' + (solo++) + '_' + d.id;
+      if (!map.has(k)) map.set(k, []);
+      map.get(k).push(d);
+    });
+    return [...map.entries()].map(([k, ds]) => this.evalGroup(k, ds));
+  }
+
+  evalGroup(key, ds) {
+    const po = ds.find(d => d.type === 'po');
+    const grns = ds.filter(d => d.type === 'grn');
+    const invs = ds.filter(d => d.type === 'invoice');
+    const anchor = po || invs[0] || ds[0];
+    const f = anchor.fields || {};
+    const cur = f.currency || (po && po.fields.currency) || (invs[0] && invs[0].fields.currency) || 'USD';
+    const ref = (po && po.fields.poRef) || (invs[0] && invs[0].fields.poRef) || f.docId || '—';
+    const vendor = f.vendor || (po && po.fields.vendor) || (invs[0] && invs[0].fields.vendor) || 'Unknown vendor';
+    const country = f.country || (po && po.fields.country) || (invs[0] && invs[0].fields.country) || '—';
+    const poTotal = po ? po.fields.total : null;
+    const inv = invs[0];
+    const invTotal = inv ? inv.fields.total : null;
+
+    let status = 'matched', risk = 0;
+    if (invs.length > 1) { status = 'duplicate'; risk = invTotal || 0; }
+    else if (po && !inv) status = 'await_invoice';
+    else if (!po && inv) { status = 'missing_po'; risk = invTotal || 0; }
+    else if (po && inv) {
+      const poQty = po.fields.qty, recvQty = grns.length ? grns[0].fields.qty : null;
+      if (grns.length === 0) { status = 'missing_grn'; risk = invTotal || 0; }
+      else if (poQty && recvQty && recvQty < poQty) { status = 'short'; risk = (poTotal || invTotal || 0) * (1 - recvQty / poQty); }
+      else if (poTotal && invTotal && invTotal > poTotal * 1.02) { status = 'price'; risk = invTotal - poTotal; }
+      else status = 'matched';
+    } else if (!po && !inv) status = 'orphan';
+
+    const EX = { duplicate:1, missing_po:1, missing_grn:1, short:1, price:1 };
+    const isEx = !!EX[status];
+    const recvQty = grns.length ? grns[0].fields.qty : null;
+    const poQty = po ? po.fields.qty : null;
+    return { key, ref, vendor, country, cur, po, grns, invs, inv, poTotal, invTotal, poQty, recvQty, status, risk, isEx,
+      docNames: ds.map(d => d.name) };
+  }
+
+  runReconcile() {
+    if (this._recRunning) return;
+    const groups = this.buildGroups();
+    if (!groups.length) return;
+    this._recRunning = true;
+    this.setState({ reconcileRunning:true, reconcileIdx:0, reconcileDone:false });
+    this._rt = setInterval(() => {
+      this.setState(s => {
+        const n = s.reconcileIdx + 1;
+        if (n >= groups.length) { clearInterval(this._rt); this._recRunning = false; return { reconcileIdx:groups.length, reconcileRunning:false, reconcileDone:true }; }
+        return { reconcileIdx:n };
+      });
+    }, 300);
+  }
+
+  reset() {
+    clearInterval(this._rt); this._running = false; this._recRunning = false; this._files = new Map(); this._nextId = 1;
+    this.setState({ view:'lake', docs:[], ingestRunning:false, reconcileRunning:false, reconcileIdx:0, reconcileDone:false, filter:'all', expanded:null, dragOver:false });
+  }
+
+  setView(v) { this.setState({ view:v }); }
+  setFilter(f) { this.setState({ filter:f }); }
+
+  money(cur, n) { if (n == null) return '—'; const sym = { EUR:'€', BRL:'R$', SGD:'S$', USD:'$', GBP:'£', INR:'₹', CNY:'¥', JPY:'¥' }[cur] || (cur ? cur + ' ' : '$'); return sym + Math.round(n).toLocaleString('en-US'); }
+  k(n) { if (!n) return '$0'; if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K'; return '$' + Math.round(n); }
+
+  renderVals() {
+    const st = this.state;
+    const emerald = '#2fd08a', amber = '#f5b942', coral = '#f2685f', sub = '#9fb3a9', faint = '#6f8a7e';
+    const docsAll = st.docs;
+    const queued = docsAll.filter(d => d.status === 'queued').length;
+    const doneCount = docsAll.filter(d => d.status === 'done').length;
+    const ingestComplete = doneCount > 0 && queued === 0 && !st.ingestRunning;
+    const reconcileDone = st.reconcileDone;
+    const hasModel = true; const llmName = this.llmModel();
+
+    // NAV
+    const navDef = [ { key:'lake', label:'Data lake', done: ingestComplete }, { key:'recon', label:'Reconciliation', done: reconcileDone }, { key:'insights', label:'Insights', done: reconcileDone } ];
+    const nav = navDef.map(n => {
+      const active = st.view === n.key;
+      return { label:n.label, done:n.done, onClick:() => this.setView(n.key),
+        rowStyle:`display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:11px 13px;border-radius:9px;border:none;cursor:pointer;background:${active?'#16291f':'transparent'};transition:background .15s`,
+        dotStyle:`width:7px;height:7px;border-radius:50%;flex-shrink:0;background:${active?emerald:'#3a4a42'}`,
+        labelStyle:`font-size:15px;font-weight:${active?600:500};color:${active?'#eaf2ee':sub}` };
+    });
+
+    // DOCS display
+    const typeName = { po:'Purchase order', invoice:'Invoice', grn:'Goods receipt', customs:'Customs', junk:'Junk' };
+    const docViews = docsAll.map(d => {
+      const isDone = d.status === 'done';
+      const isClassifying = d.status === 'classifying';
+      const isQueued = d.status === 'queued';
+      const review = isDone && d.needsReview;
+      const quar = isDone && d.isJunk;
+      const pillBase = "font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.02em;padding:3px 8px;border-radius:5px;white-space:nowrap;";
+      let pillStyle = '', pillLabel = '', metaLabel = '';
+      if (quar) { pillStyle = pillBase+'background:rgba(255,255,255,0.05);color:#6f8a7e'; pillLabel='Quarantined'; metaLabel='noise'; }
+      else if (review) { pillStyle = pillBase+'background:rgba(245,185,66,0.14);color:#f5b942'; pillLabel=typeName[d.type]||'Document'; metaLabel=Math.round((d.confidence||0)*100)+'% · review'; }
+      else if (isDone) { pillStyle = pillBase+'background:rgba(47,208,138,0.12);color:#2fd08a'; pillLabel=typeName[d.type]||'Document'; metaLabel=Math.round((d.confidence||0)*100)+'%'; }
+      let border = 'rgba(255,255,255,0.07)', op = '1';
+      if (isClassifying) border = 'rgba(47,208,138,0.5)';
+      else if (review) border = 'rgba(245,185,66,0.4)';
+      if (quar) op = '0.55';
+      const tileStyle = `background:#122019;border:1px solid ${border};border-radius:10px;padding:13px 14px;display:flex;flex-direction:column;gap:6px;min-width:0;opacity:${op};${isClassifying?'animation:ts-pulse 1s ease infinite;':''}`;
+      // extract line
+      let extractLine = '', showExtract = false;
+      if (isDone && !d.isJunk) {
+        const f = d.fields || {};
+        const bits = [];
+        if (f.vendor) bits.push(f.vendor);
+        if (f.total != null) bits.push(this.money(f.currency, f.total));
+        if (!bits.length && f.poRef) bits.push(f.poRef);
+        if (!bits.length && f.summary) bits.push(f.summary);
+        if (bits.length) { extractLine = bits.join(' · '); showExtract = true; }
+      } else if (isDone && d.isJunk && d.fields && d.fields.summary) { extractLine = d.fields.summary; showExtract = true; }
+      return { id:d.id, type:d.type, isJunk:d.isJunk, review, name:d.name, source:d.source, isDone, isClassifying, isQueued, pillStyle, pillLabel, metaLabel, tileStyle, extractLine, showExtract };
+    });
+
+    // filter
+    const f = st.filter;
+    const docs = docViews.filter(d => {
+      if (f === 'all') return true;
+      if (f === 'quarantined') return d.isJunk;
+      if (f === 'review') return d.review;
+      if (!d.isDone) return true;
+      return d.type === f;
+    });
+
+    // lake stats
+    const total = docsAll.length;
+    const routed = docsAll.filter(d => d.status === 'done' && !d.isJunk).length;
+    const quarN = docsAll.filter(d => d.status === 'done' && d.isJunk).length;
+    const reviewN = docsAll.filter(d => d.status === 'done' && d.needsReview).length;
+    const lakeStats = [
+      { value:String(total), label:'documents in lake', color:'#eaf2ee' },
+      { value: doneCount ? String(routed) : '—', label:'routed to processing', color: doneCount?emerald:sub },
+      { value: doneCount ? String(quarN) : '—', label:'quarantined as noise', color:sub },
+      { value: doneCount ? String(reviewN) : '—', label:'flagged for review', color: reviewN?amber:sub }
+    ];
+    const lakeSub = total === 0 ? 'Drop files or load the sample set to begin'
+      : ingestComplete ? `${total} documents classified${hasModel?' by the engine':''}`
+      : st.ingestRunning ? 'Reading and classifying documents…'
+      : `${total} documents staged — ${queued} queued for ingestion`;
+
+    // ingest button
+    const btnBase = "font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;letter-spacing:0.05em;padding:13px 22px;border-radius:9px;border:none;";
+    let ingestBtn, showIngestBtn = total > 0;
+    if (st.ingestRunning) { const processed = docsAll.filter(d=>d.status==='done').length; ingestBtn = { label:`CLASSIFYING ${processed} / ${total}…`, onClick:()=>{}, style: btnBase+'background:#16291f;color:#2fd08a;cursor:default' }; }
+    else if (queued > 0) ingestBtn = { label:`▶  RUN INGESTION (${queued})`, onClick:() => this.runIngest(), style: btnBase+'background:#2fd08a;color:#06140e;cursor:pointer' };
+    else if (doneCount > 0) ingestBtn = { label:'✓  INGESTION COMPLETE', onClick:()=>{}, style: btnBase+'background:rgba(47,208,138,0.12);color:#2fd08a;cursor:default' };
+    else { showIngestBtn = false; ingestBtn = { label:'', onClick:()=>{}, style:'' }; }
+
+    // chips
+    const cnt = t => docsAll.filter(d => d.status === 'done' && d.type === t).length;
+    const chipDef = [ { key:'all', label:'All', n:total }, { key:'po', label:'Purchase orders', n:cnt('po') }, { key:'invoice', label:'Invoices', n:cnt('invoice') }, { key:'grn', label:'Goods receipts', n:cnt('grn') }, { key:'customs', label:'Customs', n:cnt('customs') }, { key:'review', label:'Needs review', n:reviewN }, { key:'quarantined', label:'Quarantined', n:quarN } ];
+    const chips = chipDef.filter(c => c.key==='all' || c.n>0).map(c => {
+      const on = st.filter === c.key;
+      return { label:`${c.label} · ${c.n}`, onClick:()=>this.setFilter(c.key), style:`font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 13px;border-radius:7px;cursor:pointer;border:1px solid ${on?'rgba(47,208,138,0.5)':'rgba(255,255,255,0.1)'};background:${on?'rgba(47,208,138,0.1)':'transparent'};color:${on?'#2fd08a':sub}` };
+    });
+
+    // dropzone style
+    const dropStyle = `display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;border-radius:16px;border:1.5px dashed ${st.dragOver?'rgba(47,208,138,0.8)':'rgba(255,255,255,0.16)'};background:${st.dragOver?'rgba(47,208,138,0.06)':'#0e1712'};transition:all .15s`;
+
+    // RECONCILIATION
+    const groups = doneCount > 0 ? this.buildGroups() : [];
+    const exLabel = { matched:'✓ Matched', price:'Price variance', short:'Short delivery', duplicate:'Duplicate invoice', missing_grn:'Missing GRN', missing_po:'No matching PO', await_invoice:'Awaiting invoice', orphan:'Awaiting counterpart' };
+    // sort: exceptions by risk desc, then others
+    const ordered = [...groups].sort((a,b) => (b.isEx?1:0)-(a.isEx?1:0) || (b.risk||0)-(a.risk||0));
+    const txns = ordered.map((g, i) => {
+      const resolved = reconcileDone || i < st.reconcileIdx;
+      const resolving = st.reconcileRunning && i === st.reconcileIdx;
+      const pillBase = "font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.03em;padding:5px 11px;border-radius:6px;white-space:nowrap;";
+      let pillStyle, pillLabel;
+      if (!resolved) { pillStyle = pillBase+`background:rgba(255,255,255,0.05);color:${faint}`; pillLabel = resolving ? 'matching…' : 'pending'; }
+      else if (g.status === 'matched') { pillStyle = pillBase+'background:rgba(47,208,138,0.14);color:#2fd08a'; pillLabel = '✓ Matched'; }
+      else if (g.isEx) { pillStyle = pillBase+'background:rgba(245,185,66,0.16);color:#f5b942'; pillLabel = exLabel[g.status]; }
+      else { pillStyle = pillBase+`background:rgba(255,255,255,0.06);color:${sub}`; pillLabel = exLabel[g.status]; }
+
+      const norm = '#eaf2ee';
+      const poCol = { label:'Purchase order', main: g.po ? this.money(g.cur, g.poTotal) : 'No PO', sub: g.po ? (g.po.fields.poRef || g.ref) : 'not in this batch', flag: !g.po && resolved && g.status==='missing_po' };
+      let grnMain, grnSub, grnFlag = false;
+      if (g.grns.length === 0) { grnMain = 'Not received'; grnSub = 'no GRN on file'; grnFlag = (g.status==='missing_grn'); }
+      else if (g.poQty && g.recvQty && g.recvQty < g.poQty) { grnMain = `${g.recvQty.toLocaleString()} / ${g.poQty.toLocaleString()}`; grnSub = 'units · short delivery'; grnFlag = true; }
+      else { grnMain = 'Received'; grnSub = g.recvQty ? g.recvQty.toLocaleString()+' units' : 'confirmed'; }
+      const grnCol = { label:'Goods received', main:grnMain, sub:grnSub, flag: grnFlag && resolved };
+      let invSub = g.inv ? (g.inv.fields.docId || 'invoice') : 'no invoice yet', invFlag = false;
+      if (g.status === 'price') { invSub = 'over PO price'; invFlag = true; }
+      else if (g.status === 'duplicate') { invSub = (g.inv && g.inv.fields.docId ? g.inv.fields.docId : 'invoice') + ' · submitted 2×'; invFlag = true; }
+      const invCol = { label:'Invoice', main: g.inv ? this.money(g.cur, g.invTotal) : 'No invoice', sub: invSub, flag: invFlag && resolved };
+      const cols = [poCol, grnCol, invCol].map(c => ({ label:c.label, main:c.main, sub:c.sub, color: c.flag ? coral : norm, subColor: c.flag ? coral : faint }));
+
+      // detail
+      const detailBody = {
+        price: `The invoice from ${g.vendor} bills ${this.money(g.cur, g.invTotal)} against a purchase order of ${this.money(g.cur, g.poTotal)} — an overcharge of ${this.money(g.cur, (g.invTotal||0)-(g.poTotal||0))}. Goods were received, so this is a pricing discrepancy, not a delivery issue.`,
+        short: `Only ${(g.recvQty||0).toLocaleString()} of ${(g.poQty||0).toLocaleString()} ordered units were received from ${g.vendor}, but the invoice bills for the full order.`,
+        duplicate: `Invoice ${g.inv && g.inv.fields.docId ? g.inv.fields.docId : ''} from ${g.vendor} appears ${g.invs.length} times in this batch. Paying each copy would multiply a single charge.`,
+        missing_grn: `A purchase order and matching invoice exist for ${g.vendor}, but no goods receipt confirms delivery. Paying now risks releasing ${this.money(g.cur, g.invTotal)} for goods that may not have arrived.`,
+        missing_po: `An invoice for ${this.money(g.cur, g.invTotal)} from ${g.vendor} has no matching purchase order in this batch. It cannot be validated against an approved commitment.`
+      };
+      const detailAction = {
+        price: 'Hold the difference and dispute the overbilling against the agreed PO price before releasing payment.',
+        short: 'Withhold payment on the undelivered units, or request a corrected invoice matching the goods receipt.',
+        duplicate: 'Pay once and block the duplicate. Flag the vendor feed for repeated submissions.',
+        missing_grn: 'Hold payment until the warehouse confirms receipt, then release against the goods-received note.',
+        missing_po: 'Hold the invoice and locate or raise the matching purchase order before approving.'
+      };
+      const canExpand = resolved && g.isEx;
+      const open = canExpand && st.expanded === g.key;
+      let cardBorder = 'rgba(255,255,255,0.07)';
+      if (resolving) cardBorder = 'rgba(47,208,138,0.4)';
+      else if (resolved && g.isEx) cardBorder = 'rgba(245,185,66,0.28)';
+      else if (resolved && g.status === 'matched') cardBorder = 'rgba(47,208,138,0.18)';
+      return {
+        key:g.key, ref: g.ref, vendor:g.vendor, country:g.country, pillStyle, pillLabel,
+        cardStyle:`background:#122019;border:1px solid ${cardBorder};border-radius:13px;overflow:hidden;${resolving?'animation:ts-pulse 1s ease infinite;':''}`,
+        headStyle:`display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 22px;cursor:${canExpand?'pointer':'default'}`,
+        onClick: canExpand ? () => this.setState(s => ({ expanded: s.expanded === g.key ? null : g.key })) : null,
+        canExpand, chevStyle:`font-size:22px;color:${faint};transition:transform .2s;display:inline-block;transform:rotate(${open?90:0}deg)`,
+        cols, showDetail: open,
+        detail: { body: detailBody[g.status] || '', action: detailAction[g.status] || '', impact: this.k(g.risk), sources: g.docNames }
+      };
+    });
+
+    const matchedN = groups.filter(g => g.status === 'matched').length;
+    const exGroups = groups.filter(g => g.isEx);
+    const exN = exGroups.length;
+    const riskTotal = groups.reduce((a,g) => a + (g.risk||0), 0);
+    const reconSummary = { matched: reconcileDone?String(matchedN):'—', exceptions: reconcileDone?String(exN):'—', risk: reconcileDone?this.k(riskTotal):'—' };
+    let reconBtn;
+    if (st.reconcileRunning) reconBtn = { label:`MATCHING ${st.reconcileIdx} / ${groups.length}…`, onClick:()=>{}, style: btnBase+'background:#16291f;color:#2fd08a;cursor:default' };
+    else if (reconcileDone) reconBtn = { label:'✓  RECONCILIATION COMPLETE', onClick:()=>this.runReconcile(), style: btnBase+'background:rgba(47,208,138,0.12);color:#2fd08a;cursor:pointer' };
+    else reconBtn = { label:'▶  RUN RECONCILIATION', onClick:() => this.runReconcile(), style: btnBase+'background:#2fd08a;color:#06140e;cursor:pointer' };
+
+    // INSIGHTS
+    const confDocs = docsAll.filter(d => d.status==='done' && !d.isJunk);
+    const avgConf = confDocs.length ? Math.round(confDocs.reduce((a,d)=>a+(d.confidence||0),0)/confDocs.length*100) : 0;
+    const kpis = [
+      { value:String(total), label:'documents ingested', color:'#eaf2ee' },
+      { value:String(routed), label:'routed to AP', color:'#eaf2ee' },
+      { value:String(quarN), label:'quarantined', color:sub },
+      { value:String(exN), label:'exceptions surfaced', color: exN?amber:sub },
+      { value:this.k(riskTotal), label:'value at risk', color: riskTotal?coral:sub },
+      { value:avgConf+'%', label:'avg confidence', color:emerald }
+    ];
+    const byType = {};
+    exGroups.forEach(g => { byType[g.status] = (byType[g.status]||0) + (g.risk||0); });
+    const riskArr = Object.entries(byType).map(([k,v]) => ({ status:k, val:v })).sort((a,b)=>b.val-a.val);
+    const maxRisk = Math.max(1, ...riskArr.map(r => r.val));
+    const riskBars = riskArr.map(r => ({ label: (exLabel[r.status]||r.status).replace('✓ ',''), disp:this.k(r.val), width:(r.val/maxRisk*100).toFixed(0)+'%' }));
+    const mixDef = [ { label:'Invoice', t:'invoice', color:'#2c6b52' }, { label:'Purchase order', t:'po', color:'#2c6b52' }, { label:'Goods receipt', t:'grn', color:'#2c6b52' }, { label:'Customs', t:'customs', color:'#2c6b52' }, { label:'Quarantined', t:'junk', color:'#3a4a42' } ];
+    const mixCounts = mixDef.map(m => ({ ...m, val: docsAll.filter(d=>d.status==='done' && d.type===m.t).length })).filter(m => m.val>0);
+    const maxMix = Math.max(1, ...mixCounts.map(m => m.val));
+    const mixBars = mixCounts.map(m => ({ label:m.label, val:String(m.val), color:m.color, width:(m.val/maxMix*100).toFixed(0)+'%' }));
+    const actTag = `font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.03em;padding:4px 9px;border-radius:5px;white-space:nowrap;width:150px;text-align:center;flex-shrink:0;background:rgba(245,185,66,0.13);color:${amber}`;
+    const actionText = { missing_grn:'Hold payment — no goods receipt confirms delivery', duplicate:'Block duplicate invoice before it is paid twice', short:'Recover short-delivered units or adjust the invoice', price:'Dispute overbilling against agreed PO price', missing_po:'Hold — invoice has no matching purchase order' };
+    const actions = [...exGroups].sort((a,b)=>(b.risk||0)-(a.risk||0)).map(g => ({ impact:this.k(g.risk), tag:(exLabel[g.status]||'').replace('✓ ',''), tagStyle:actTag, text:actionText[g.status]||'Review exception', vendor:g.vendor }));
+
+    return {
+      crumb: st.view === 'lake' ? 'data-lake' : st.view === 'recon' ? 'reconciliation' : 'insights',
+      engineLabel: 'Local model · ' + llmName + ' (Ollama) · keyword fallback if offline',
+      onReset: () => this.reset(),
+      nav,
+      isLake: st.view === 'lake', isRecon: st.view === 'recon', isInsights: st.view === 'insights',
+      // lake
+      hasDocs: total > 0, lakeSub, lakeStats, showChips: doneCount > 0 && chips.length > 1, chips, docs, ingestBtn, showIngestBtn, dropStyle,
+      onBrowse: () => this.onBrowse(), onFiles: (e) => this.onFiles(e), onLoadSample: () => this.onLoadSample(),
+      setFileInput: (el) => this.setFileInput(el),
+      onDragOver: (e) => this.onDragOver(e), onDragLeave: (e) => this.onDragLeave(e), onDrop: (e) => this.onDrop(e),
+      // recon
+      reconReady: doneCount > 0, reconEmpty: doneCount === 0,
+      onGoIngest: () => this.setView('lake'), txns, reconSummary, reconBtn,
+      // insights
+      insightsReady: reconcileDone, insightsEmpty: !reconcileDone,
+      onGoRecon: () => this.setView('recon'),
+      kpis, riskBars, mixBars, actions,
+      hasRisk: riskBars.length > 0, noRisk: riskBars.length === 0,
+      hasActions: actions.length > 0, noActions: actions.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

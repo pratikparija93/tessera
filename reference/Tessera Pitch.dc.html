@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;box-sizing:border-box}
+  body{margin:0;background:#0b1410}
+  .ts-card{background:#122019;border:1px solid rgba(255,255,255,0.07);border-radius:14px}
+  .pipe-arrow{color:#2fd08a;font-family:'JetBrains Mono',monospace;font-size:34px;line-height:1}
+</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Cover" data-screen-label="01 Cover" data-speaker-notes="Open warm. We're Tessera. The previous vendor left them with a bigger pile, not an answer. Today we prove a different approach on public data — no access to their lake required." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:96px 110px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;overflow:hidden">
+  <div style="display:grid;grid-template-columns:repeat(4,16px);grid-template-rows:repeat(4,16px);gap:6px">
+    <div style="background:#2fd08a"></div><div style="border:1.5px solid #2c4a3c"></div><div style="background:#2fd08a"></div><div style="border:1.5px solid #2c4a3c"></div>
+    <div style="border:1.5px solid #2c4a3c"></div><div style="background:#2fd08a"></div><div style="border:1.5px solid #2c4a3c"></div><div style="border:1.5px solid #2c4a3c"></div>
+    <div style="background:#2fd08a"></div><div style="border:1.5px solid #2c4a3c"></div><div style="border:1.5px solid #2c4a3c"></div><div style="background:#2fd08a"></div>
+    <div style="border:1.5px solid #2c4a3c"></div><div style="border:1.5px solid #2c4a3c"></div><div style="background:#2fd08a"></div><div style="border:1.5px solid #2c4a3c"></div>
+  </div>
+  <div>
+    <h1 style="font-size:128px;line-height:0.96;font-weight:600;letter-spacing:-0.03em;margin:0 0 28px">Tessera</h1>
+    <p style="font-size:46px;font-weight:500;color:#eaf2ee;margin:0 0 14px;letter-spacing:-0.01em">Order from the data lake.</p>
+    <p style="font-size:30px;color:#9fb3a9;margin:0;max-width:900px">Document intelligence for procurement &amp; finance — we don't just store documents, we understand and reconcile them.</p>
+  </div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.18em;text-transform:uppercase;color:#6f8a7e">Vendor capability briefing · Public-data demonstration</div>
+</section>
+
+<section data-label="The situation" data-screen-label="02 Situation" data-speaker-notes="Set the scale before the problem. This is a global procurement engine running with the lights off. The numbers aren't the problem — the lack of visibility into them is." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">02 — The situation</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 28px;max-width:1300px">A global procurement engine, running with the lights off</h2>
+  <p style="font-size:30px;line-height:1.5;color:#9fb3a9;margin:0 0 auto;max-width:1180px">Purchase orders, invoices, and goods-received notes flow across a sprawling vendor network and a web of cross-border dependencies. The volume isn't the problem. The lack of a single, trustworthy view of it is.</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px">
+    <div class="ts-card" style="padding:34px"><div style="font-family:'JetBrains Mono',monospace;font-size:66px;font-weight:500;color:#eaf2ee;letter-spacing:-0.02em">40+</div><div style="font-size:24px;color:#9fb3a9;margin-top:10px">countries &amp; tax regimes</div></div>
+    <div class="ts-card" style="padding:34px"><div style="font-family:'JetBrains Mono',monospace;font-size:66px;font-weight:500;color:#eaf2ee;letter-spacing:-0.02em">1,200+</div><div style="font-size:24px;color:#9fb3a9;margin-top:10px">active vendors</div></div>
+    <div class="ts-card" style="padding:34px"><div style="font-family:'JetBrains Mono',monospace;font-size:66px;font-weight:500;color:#2fd08a;letter-spacing:-0.02em">10k+</div><div style="font-size:24px;color:#9fb3a9;margin-top:10px">documents dumped per day</div></div>
+    <div class="ts-card" style="padding:34px"><div style="font-family:'JetBrains Mono',monospace;font-size:66px;font-weight:500;color:#eaf2ee;letter-spacing:-0.02em">5</div><div style="font-size:24px;color:#9fb3a9;margin-top:10px">disconnected source systems</div></div>
+  </div>
+</section>
+
+<section data-label="Four problems" data-screen-label="03 Problems" data-speaker-notes="Four symptoms, but trace them down and they share one root cause: documents were stored, never understood. Hold on that last line." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">03 — The problem</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 44px">Four problems, one root cause</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+    <div class="ts-card" style="padding:34px 36px;display:flex;gap:24px;align-items:flex-start"><span style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;padding-top:6px">A</span><div><div style="font-size:30px;font-weight:600;margin-bottom:8px">Volume &amp; complexity</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">Large transaction counts tangled in cross-country dependencies and currencies.</div></div></div>
+    <div class="ts-card" style="padding:34px 36px;display:flex;gap:24px;align-items:flex-start"><span style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;padding-top:6px">B</span><div><div style="font-size:30px;font-weight:600;margin-bottom:8px">Disparate systems</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">Data scattered across five platforms means no one holds the whole picture.</div></div></div>
+    <div class="ts-card" style="padding:34px 36px;display:flex;gap:24px;align-items:flex-start"><span style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;padding-top:6px">C</span><div><div style="font-size:30px;font-weight:600;margin-bottom:8px">An unstructured data lake</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">The last vendor pooled every system into a lake — and left it raw and unsorted.</div></div></div>
+    <div class="ts-card" style="padding:34px 36px;display:flex;gap:24px;align-items:flex-start"><span style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#f2685f;padding-top:6px">D</span><div><div style="font-size:30px;font-weight:600;margin-bottom:8px">Eroded trust</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">A failed engagement means the next approach has to prove itself before it's believed.</div></div></div>
+  </div>
+  <div style="margin-top:40px;font-size:30px;color:#eaf2ee"><span style="color:#9fb3a9">Root cause — </span>the documents were never understood, only stored.</div>
+</section>
+
+<section data-label="Why it failed" data-screen-label="04 Why failed" data-speaker-notes="The blunt version. A lake is storage. Storage is not understanding. Tens of thousands of files a day with no class, no link, no reconciliation is just a faster way to lose track." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:96px 110px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 36px">04 — Why the last approach failed</p>
+  <h2 style="font-size:88px;line-height:1.05;font-weight:600;letter-spacing:-0.025em;margin:0 0 56px;max-width:1500px">A data lake without structure is just a bigger pile.</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1560px">
+    <div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.12em;text-transform:uppercase;color:#6f8a7e;margin-bottom:14px">No classification</div><div style="font-size:26px;color:#cdddd4;line-height:1.45">Every file lands in the same undifferentiated pool — PO, invoice, or junk.</div></div>
+    <div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.12em;text-transform:uppercase;color:#6f8a7e;margin-bottom:14px">No linkage</div><div style="font-size:26px;color:#cdddd4;line-height:1.45">Nothing connects an invoice back to its order or its goods receipt.</div></div>
+    <div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.12em;text-transform:uppercase;color:#6f8a7e;margin-bottom:14px">No reconciliation</div><div style="font-size:26px;color:#cdddd4;line-height:1.45">Discrepancies surface only when money has already gone out the door.</div></div>
+  </div>
+</section>
+
+<section data-label="Cost of chaos" data-screen-label="05 Cost" data-speaker-notes="Quantify the pain in CFO language. These are illustrative industry benchmarks, flagged as such — honesty matters with a burned customer. The point: invisibility has a price, and it compounds daily." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">05 — The cost of chaos</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 48px">What poor visibility quietly costs</h2>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;flex:1">
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:500;color:#f2685f;letter-spacing:-0.02em">1&ndash;2%</div><div style="font-size:26px;color:#cdddd4;margin-top:12px">of spend lost to duplicate &amp; erroneous payments</div></div>
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:500;color:#f5b942;letter-spacing:-0.02em">Missed</div><div style="font-size:26px;color:#cdddd4;margin-top:12px">early-payment discounts left on the table</div></div>
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:500;color:#f5b942;letter-spacing:-0.02em">Audit</div><div style="font-size:26px;color:#cdddd4;margin-top:12px">&amp; compliance exposure across tax regimes</div></div>
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:500;color:#f5b942;letter-spacing:-0.02em">Trapped</div><div style="font-size:26px;color:#cdddd4;margin-top:12px">working capital from slow, manual matching</div></div>
+  </div>
+  <div style="margin-top:28px;font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e">Industry benchmarks shown for illustration — we baseline against your data in Phase 1.</div>
+</section>
+
+<section data-label="Our thesis" data-screen-label="06 Thesis" data-speaker-notes="This is our north star and the whole pitch in three words: structure first. Everything downstream — insight, automation, trust — is impossible without it." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:96px 110px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 36px">06 — Our thesis</p>
+  <h2 style="font-size:96px;line-height:1.02;font-weight:600;letter-spacing:-0.03em;margin:0 0 64px">Structure first.<br>Insight follows.</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1560px">
+    <div style="border-top:2px solid #2fd08a;padding-top:24px"><div style="font-size:30px;font-weight:600;margin-bottom:10px">Understand every document</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">Classify and extract on arrival — no document stays anonymous.</div></div>
+    <div style="border-top:2px solid #2fd08a;padding-top:24px"><div style="font-size:30px;font-weight:600;margin-bottom:10px">Link the lifecycle</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">Connect each PO to its goods receipt and its invoice automatically.</div></div>
+    <div style="border-top:2px solid #2fd08a;padding-top:24px"><div style="font-size:30px;font-weight:600;margin-bottom:10px">Reconcile continuously</div><div style="font-size:24px;color:#9fb3a9;line-height:1.45">Catch discrepancies before payment, not in next quarter's audit.</div></div>
+  </div>
+</section>
+
+<section data-label="How it works" data-screen-label="07 Pipeline" data-speaker-notes="The pipeline. Each document flows through five stages. The key design choice: confidence gates. Anything the model is unsure of routes to a human — automation handles the certain, people handle the exceptions." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">07 — How Tessera works</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 56px">From raw dump to reconciled ledger</h2>
+  <div style="display:flex;align-items:stretch;gap:18px;flex:1;max-height:420px">
+    <div class="ts-card" style="flex:1;padding:32px 26px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;margin-bottom:auto">01</div><div style="font-size:30px;font-weight:600;margin:18px 0 10px">Ingest</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Pull from the lake — any format, any source, at any volume.</div></div>
+    <div style="display:flex;align-items:center"><span class="pipe-arrow">&rarr;</span></div>
+    <div class="ts-card" style="flex:1;padding:32px 26px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;margin-bottom:auto">02</div><div style="font-size:30px;font-weight:600;margin:18px 0 10px">Classify</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">PO, invoice, GRN, customs — or junk. Quarantine the noise.</div></div>
+    <div style="display:flex;align-items:center"><span class="pipe-arrow">&rarr;</span></div>
+    <div class="ts-card" style="flex:1;padding:32px 26px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;margin-bottom:auto">03</div><div style="font-size:30px;font-weight:600;margin:18px 0 10px">Extract</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Lift line items, amounts, vendors and dates into a common schema.</div></div>
+    <div style="display:flex;align-items:center"><span class="pipe-arrow">&rarr;</span></div>
+    <div class="ts-card" style="flex:1;padding:32px 26px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;margin-bottom:auto">04</div><div style="font-size:30px;font-weight:600;margin:18px 0 10px">Reconcile</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Three-way match the lifecycle and flag every exception.</div></div>
+    <div style="display:flex;align-items:center"><span class="pipe-arrow">&rarr;</span></div>
+    <div class="ts-card" style="flex:1;padding:32px 26px;display:flex;flex-direction:column;background:#16291f;border-color:rgba(47,208,138,0.35)"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;margin-bottom:auto">05</div><div style="font-size:30px;font-weight:600;margin:18px 0 10px">Insight</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Live reports for procurement and finance, evidence attached.</div></div>
+  </div>
+  <div style="margin-top:36px;font-size:26px;color:#cdddd4"><span style="color:#2fd08a">&bull;</span> &nbsp;Confidence-gated: every low-certainty decision is routed to a human reviewer.</div>
+</section>
+
+<section data-label="Three-way match" data-screen-label="08 3-way match" data-speaker-notes="The financial heart of the system. The order says what we agreed to buy, the goods receipt says what arrived, the invoice says what we're billed. When all three agree, auto-approve. When they don't, that's an exception worth money." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">08 — The core mechanism</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 48px">The three-way match</h2>
+  <div style="display:flex;align-items:center;gap:36px;flex:1">
+    <div style="display:flex;flex-direction:column;gap:18px;width:380px">
+      <div class="ts-card" style="padding:26px 30px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;letter-spacing:0.1em">PURCHASE ORDER</div><div style="font-size:24px;color:#cdddd4;margin-top:6px">What we agreed to buy</div></div>
+      <div class="ts-card" style="padding:26px 30px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;letter-spacing:0.1em">GOODS RECEIVED</div><div style="font-size:24px;color:#cdddd4;margin-top:6px">What actually arrived</div></div>
+      <div class="ts-card" style="padding:26px 30px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;letter-spacing:0.1em">INVOICE</div><div style="font-size:24px;color:#cdddd4;margin-top:6px">What we're billed for</div></div>
+    </div>
+    <span class="pipe-arrow" style="font-size:44px">&rarr;</span>
+    <div class="ts-card" style="padding:40px;width:300px;text-align:center;background:#16291f;border-color:rgba(47,208,138,0.4)"><div style="font-size:34px;font-weight:600;color:#2fd08a">Match engine</div><div style="font-size:24px;color:#9fb3a9;margin-top:12px;line-height:1.4">Aligns line items, quantities, prices, currency &amp; tax</div></div>
+    <span class="pipe-arrow" style="font-size:44px">&rarr;</span>
+    <div style="display:flex;flex-direction:column;gap:18px;flex:1">
+      <div style="border:1px solid rgba(47,208,138,0.4);background:rgba(47,208,138,0.08);border-radius:14px;padding:24px 28px"><div style="font-size:26px;font-weight:600;color:#2fd08a">Matched &rarr; auto-approve</div></div>
+      <div style="border:1px solid rgba(242,104,95,0.4);background:rgba(242,104,95,0.07);border-radius:14px;padding:24px 28px"><div style="font-size:26px;font-weight:600;color:#f2685f;margin-bottom:10px">Exception &rarr; route &amp; resolve</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#cdddd4;line-height:1.7">price variance · short delivery<br>missing GRN · duplicate invoice<br>currency / customs mismatch</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Where we differ" data-screen-label="09 Differentiation" data-speaker-notes="Direct contrast with the failed vendor. Don't trash them — just show the difference in approach. Their model was store-and-hope. Ours is understand-then-act, and prove-before-access." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">09 — Differentiation</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 44px">Where we differ from the last vendor</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1">
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px"><span style="width:12px;height:12px;border-radius:50%;background:#f2685f"></span><span style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.14em;text-transform:uppercase;color:#9fb3a9">Previous vendor</span></div>
+      <div style="display:flex;flex-direction:column;gap:18px;font-size:24px;color:#9fb3a9;line-height:1.35">
+        <div>Pooled raw documents into a lake</div>
+        <div>No classification on ingest</div>
+        <div>No PO &rarr; GRN &rarr; invoice linkage</div>
+        <div>Black-box, unexplained outputs</div>
+        <div>Big-bang integration, all at once</div>
+      </div>
+    </div>
+    <div class="ts-card" style="padding:38px 40px;display:flex;flex-direction:column;background:#16291f;border-color:rgba(47,208,138,0.35)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px"><span style="width:12px;height:12px;border-radius:50%;background:#2fd08a"></span><span style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.14em;text-transform:uppercase;color:#2fd08a">Tessera</span></div>
+      <div style="display:flex;flex-direction:column;gap:18px;font-size:24px;color:#eaf2ee;line-height:1.35">
+        <div>Classifies &amp; extracts at ingestion</div>
+        <div>Structured, searchable, deduplicated</div>
+        <div>Full lifecycle linkage, automatically</div>
+        <div>Evidence-backed, explainable decisions</div>
+        <div>Prove on public data, scale in phases</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Live demo" data-screen-label="10 Demo" data-speaker-notes="Transition to the console. We're about to ingest a simulated data lake of public procurement documents — mixed with junk — and watch it classify and reconcile in real time. This is the thing the last vendor never showed you." style="background:#2fd08a;color:#06140e;font-family:'Schibsted Grotesk',sans-serif;padding:96px 110px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#0a3324;margin:0 0 32px">10 — Live demo</p>
+  <h2 style="font-size:104px;line-height:1.0;font-weight:600;letter-spacing:-0.03em;margin:0 0 28px">See it on public data.</h2>
+  <p style="font-size:36px;color:#0a3324;margin:0 0 56px;max-width:1300px">A simulated data lake — purchase orders, invoices, goods receipts, customs docs, and junk — ingested, classified, and reconciled live.</p>
+  <a href="Tessera Console.dc.html" style="align-self:flex-start;display:inline-flex;align-items:center;gap:14px;background:#06140e;color:#2fd08a;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.04em;padding:24px 40px;border-radius:12px">Open the Tessera Console &nbsp;&rarr;</a>
+</section>
+
+<section data-label="Insights" data-screen-label="11 Insights" data-speaker-notes="What procurement and finance actually get out of it. Not a document repository — a decision surface. Match rate, value reconciled, value at risk, and where the exceptions cluster by country and vendor." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">11 — Insights</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 44px">Insights for procurement and finance</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-bottom:30px">
+    <div class="ts-card" style="padding:30px"><div style="font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:500;color:#eaf2ee">24,318</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">documents processed</div></div>
+    <div class="ts-card" style="padding:30px"><div style="font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:500;color:#2fd08a">92.4%</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">auto-match rate</div></div>
+    <div class="ts-card" style="padding:30px"><div style="font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:500;color:#eaf2ee">$48.2M</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">spend reconciled</div></div>
+    <div class="ts-card" style="padding:30px"><div style="font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:500;color:#f5b942">$1.6M</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">value at risk, flagged</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1">
+    <div class="ts-card" style="padding:32px 36px;display:flex;flex-direction:column"><div style="font-size:24px;font-weight:600;margin-bottom:24px">Exceptions by type</div>
+      <div style="display:flex;flex-direction:column;gap:18px;font-family:'JetBrains Mono',monospace;font-size:24px;color:#cdddd4">
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:170px">Price variance</span><span style="height:18px;width:46%;background:#f2685f;border-radius:4px"></span><span>418</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:170px">Duplicate invoice</span><span style="height:18px;width:34%;background:#f5b942;border-radius:4px"></span><span>307</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:170px">Short delivery</span><span style="height:18px;width:27%;background:#f5b942;border-radius:4px"></span><span>241</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:170px">Missing GRN</span><span style="height:18px;width:19%;background:#2fd08a;border-radius:4px"></span><span>166</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:170px">FX / customs</span><span style="height:18px;width:12%;background:#2fd08a;border-radius:4px"></span><span>98</span></div>
+      </div>
+    </div>
+    <div class="ts-card" style="padding:32px 36px;display:flex;flex-direction:column"><div style="font-size:24px;font-weight:600;margin-bottom:24px">Value at risk by country</div>
+      <div style="display:flex;flex-direction:column;gap:18px;font-family:'JetBrains Mono',monospace;font-size:24px;color:#cdddd4">
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:120px">Germany</span><span style="height:18px;width:52%;background:#2c6b52;border-radius:4px"></span><span>$430k</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:120px">Brazil</span><span style="height:18px;width:41%;background:#2c6b52;border-radius:4px"></span><span>$362k</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:120px">India</span><span style="height:18px;width:33%;background:#2c6b52;border-radius:4px"></span><span>$295k</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:120px">USA</span><span style="height:18px;width:26%;background:#2c6b52;border-radius:4px"></span><span>$268k</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:120px">Singapore</span><span style="height:18px;width:18%;background:#2c6b52;border-radius:4px"></span><span>$201k</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Built to scale" data-screen-label="12 Scale" data-speaker-notes="Address the volume head-on. The architecture is built to absorb the daily dump and to reprocess history without a re-integration. Automation scales linearly; humans only ever touch the exceptions." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">12 — Scalability &amp; reliability</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 48px">Built to absorb the daily dump</h2>
+  <div style="display:flex;gap:48px;flex:1">
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:40px;width:520px">
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:72px;font-weight:500;color:#2fd08a;letter-spacing:-0.02em">50k+</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">documents/day, headroom to spare</div></div>
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:72px;font-weight:500;color:#eaf2ee;letter-spacing:-0.02em">&lt; 2s</div><div style="font-size:24px;color:#9fb3a9;margin-top:8px">median classify + extract per document</div></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px">
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:22px"><div style="font-size:28px;font-weight:600;margin-bottom:6px">Horizontally scalable ingestion</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Queue-based workers scale out with volume — spikes drain, they don't break.</div></div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:22px"><div style="font-size:28px;font-weight:600;margin-bottom:6px">Backfill without re-integration</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Reprocess years of history through the same pipeline as today's arrivals.</div></div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:22px"><div style="font-size:28px;font-weight:600;margin-bottom:6px">Humans only on exceptions</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Confidence gates keep review effort flat as volume grows.</div></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Trust before access" data-screen-label="13 Trust" data-speaker-notes="This is the slide for the burned customer. We invert the usual ask. You don't grant us access and hope. We earn it — public-data proof first, sandboxed slice next, credentials only once value is demonstrated." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">13 — Trust</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px">We earn access — we don't ask for it on faith</h2>
+  <p style="font-size:30px;color:#9fb3a9;margin:0 0 auto;max-width:1200px">The last vendor got the keys to the lake up front. We flip that order entirely.</p>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:52px">
+    <div class="ts-card" style="padding:34px 38px"><div style="font-size:28px;font-weight:600;margin-bottom:10px">Prove on public data first</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">This demo runs entirely on public documents — zero access to your systems.</div></div>
+    <div class="ts-card" style="padding:34px 38px"><div style="font-size:28px;font-weight:600;margin-bottom:10px">No credentials until value is shown</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Access is granted in stages, each gated on a result you can verify.</div></div>
+    <div class="ts-card" style="padding:34px 38px"><div style="font-size:28px;font-weight:600;margin-bottom:10px">Every decision is auditable</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Each match and exception links back to the source documents behind it.</div></div>
+    <div class="ts-card" style="padding:34px 38px"><div style="font-size:28px;font-weight:600;margin-bottom:10px">Enterprise security posture</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">SOC 2 Type II, encryption in transit &amp; at rest, least-privilege, data residency.</div></div>
+  </div>
+</section>
+
+<section data-label="The rollout" data-screen-label="14 Rollout" data-speaker-notes="The low-risk path from today to scale. Four phases, each one earns the next. Phase 0 is what you're watching now. Notice access only appears in Phase 1 — and only to a sandboxed slice." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:88px 110px;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 24px">14 — The rollout</p>
+  <h2 style="font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-0.02em;margin:0 0 56px">A path that earns each step</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px;flex:1">
+    <div class="ts-card" style="padding:32px 30px;display:flex;flex-direction:column;background:#16291f;border-color:rgba(47,208,138,0.35)"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;letter-spacing:0.08em">PHASE 0 · NOW</div><div style="font-size:30px;font-weight:600;margin:18px 0 12px">Public-data proof</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4;margin-bottom:auto">Demonstrate ingest, classify &amp; reconcile on open data.</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-top:18px">This session</div></div>
+    <div class="ts-card" style="padding:32px 30px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;letter-spacing:0.08em">PHASE 1</div><div style="font-size:30px;font-weight:600;margin:18px 0 12px">Sandbox slice</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4;margin-bottom:auto">One country, read-only sample. Baseline against your data.</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-top:18px">2&ndash;3 weeks</div></div>
+    <div class="ts-card" style="padding:32px 30px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;letter-spacing:0.08em">PHASE 2</div><div style="font-size:30px;font-weight:600;margin:18px 0 12px">Production reconciliation</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4;margin-bottom:auto">Live three-way matching with humans on exceptions.</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-top:18px">4&ndash;8 weeks</div></div>
+    <div class="ts-card" style="padding:32px 30px;display:flex;flex-direction:column"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#2fd08a;letter-spacing:0.08em">PHASE 3</div><div style="font-size:30px;font-weight:600;margin:18px 0 12px">Scale &amp; automate</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4;margin-bottom:auto">All countries, backfill history, raise automation thresholds.</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-top:18px">Ongoing</div></div>
+  </div>
+</section>
+
+<section data-label="What's next" data-screen-label="15 Next" data-speaker-notes="Close on the ask. We've shown the approach and proven it on public data. The next step is small and reversible: a read-only sandbox slice. Low risk, fast signal." style="background:#0b1410;color:#eaf2ee;font-family:'Schibsted Grotesk',sans-serif;padding:96px 110px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:0.22em;text-transform:uppercase;color:#2fd08a;margin:0 0 32px">15 — What happens next</p>
+  <h2 style="font-size:84px;line-height:1.03;font-weight:600;letter-spacing:-0.025em;margin:0 0 56px;max-width:1400px">Structure the chaos — starting with a slice, not your whole lake.</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1560px">
+    <div style="border-top:2px solid #2fd08a;padding-top:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-bottom:12px">01</div><div style="font-size:27px;font-weight:600;margin-bottom:8px">Pick a country slice</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Read-only, lowest-risk, highest-signal.</div></div>
+    <div style="border-top:2px solid #2fd08a;padding-top:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-bottom:12px">02</div><div style="font-size:27px;font-weight:600;margin-bottom:8px">Baseline in two weeks</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Match rate and value-at-risk on your own data.</div></div>
+    <div style="border-top:2px solid #2fd08a;padding-top:22px"><div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-bottom:12px">03</div><div style="font-size:27px;font-weight:600;margin-bottom:8px">Decide on the evidence</div><div style="font-size:24px;color:#9fb3a9;line-height:1.4">Scale only if the numbers earn it.</div></div>
+  </div>
+  <div style="margin-top:72px;display:flex;align-items:center;gap:16px"><div style="display:grid;grid-template-columns:repeat(2,11px);grid-template-rows:repeat(2,11px);gap:4px"><div style="background:#2fd08a"></div><div style="border:1px solid #2c4a3c"></div><div style="border:1px solid #2c4a3c"></div><div style="background:#2fd08a"></div></div><span style="font-size:28px;font-weight:600">Tessera</span><span style="font-family:'JetBrains Mono',monospace;font-size:24px;color:#6f8a7e;margin-left:8px">Order from the data lake.</span></div>
+</section>
+
+</x-import>
+</x-dc>
+</body>
+</html>
