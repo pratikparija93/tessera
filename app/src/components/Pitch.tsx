@@ -11,6 +11,7 @@ interface Props {
 export default function Pitch({ onOpenConsole }: Props) {
   const [index, setIndex] = useState(0);
   const [scale, setScale] = useState(1);
+  const [showNotes, setShowNotes] = useState(true);
   const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,6 +46,14 @@ export default function Pitch({ onOpenConsole }: Props) {
         </div>
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowNotes((v) => !v)}
+            className="font-mono text-[11px] tracking-[0.06em] px-[10px] py-[7px] rounded-[2px] cursor-pointer transition-colors"
+            style={showNotes
+              ? { color: 'var(--color-emerald)', border: '1.5px solid rgba(47,208,138,0.45)', background: 'rgba(47,208,138,0.07)' }
+              : { color: 'var(--color-text-3)', border: '1.5px solid rgba(255,255,255,0.1)', background: 'transparent' }
+            }
+          >NOTES</button>
+          <button
             onClick={() => setIndex((i) => Math.max(i - 1, 0))}
             disabled={index === 0}
             className="font-mono text-[13px] font-medium tracking-[0.05em] px-[18px] py-[12px] rounded-[9px] cursor-pointer bg-transparent text-text-2 border border-white/16 disabled:opacity-30 disabled:cursor-default"
@@ -70,13 +79,13 @@ export default function Pitch({ onOpenConsole }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-[6px] mt-4 pb-1">
+      <div className="flex flex-wrap gap-[6px] mt-4">
         {SLIDES.map((s, i) => (
           <button
             key={s.label}
             onClick={() => setIndex(i)}
             title={s.label}
-            className="font-mono text-[11px] px-[10px] py-[6px] rounded-[6px] cursor-pointer whitespace-nowrap"
+            className="font-mono text-[11px] px-[10px] py-[6px] rounded-[2px] cursor-pointer whitespace-nowrap"
             style={
               i === index
                 ? { border: '1px solid rgba(47,208,138,0.5)', background: 'rgba(47,208,138,0.1)', color: 'var(--color-emerald)' }
@@ -87,6 +96,13 @@ export default function Pitch({ onOpenConsole }: Props) {
           </button>
         ))}
       </div>
+
+      {showNotes && slide.notes && (
+        <div className="mt-3 bg-surface border border-border-soft rounded-[8px] p-[14px_18px]">
+          <div className="font-mono text-[10px] tracking-[0.12em] text-text-3 mb-[8px]">SPEAKER NOTES</div>
+          <p className="text-[14px] text-text-2 leading-[1.65] m-0">{slide.notes}</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ export interface SlideContext {
 export interface Slide {
   label: string;
   screenLabel: string;
+  notes: string;
   render: (ctx: SlideContext) => ReactNode;
 }
 
@@ -61,6 +62,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Cover',
     screenLabel: '01 Cover',
+    notes: "Set the room — this is a working demo, not a deck of promises. Everything you'll see today runs on public data in this browser tab. No backend, no API keys, nothing leaving your network. We'll walk through the console together after the slides.",
     render: () => (
       <div style={{ ...base, justifyContent: 'space-between' }}>
         <Logo4 />
@@ -80,6 +82,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'The situation',
     screenLabel: '02 Situation',
+    notes: "These numbers are directional — the shape of the problem matters more than the precision. The point: your procurement operation has enormous throughput flowing through five disconnected systems. No one holds the whole picture at once. That's not a technology failure, it's a structural one.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>02 — The situation</p>
@@ -108,6 +111,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Four problems',
     screenLabel: '03 Problems',
+    notes: "Problems A–C are structural — they came with the lake. Problem D is the hard one: a failed previous engagement means we're not just selling a product, we're rebuilding confidence. That's exactly why we insist on proving value on public data before touching anything of yours. We can't ask for trust — we have to earn it.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>03 — The problem</p>
@@ -137,6 +141,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Why it failed',
     screenLabel: '04 Why failed',
+    notes: "The previous vendor treated this as a storage problem. It's an understanding problem. Storing documents at scale is the easy part — any cloud provider can do it. The value is in what you extract from them and how you connect them to each other. A lake without classification is just a bigger pile.",
     render: () => (
       <div style={{ ...base, justifyContent: 'center' }}>
         <p style={{ ...eyebrow, margin: '0 0 36px' }}>04 — Why the last approach failed</p>
@@ -161,6 +166,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Cost of chaos',
     screenLabel: '05 Cost',
+    notes: "The 1–2% figure comes from IOFM and Hackett Group benchmarks — well-established in the AP automation space. We're not claiming your number is exactly this. We're saying: run our pipeline on a country slice and you'll have your actual number in two weeks. The footnote on this slide is important — we baseline against your data, not industry averages.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>05 — The cost of chaos</p>
@@ -187,6 +193,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Our thesis',
     screenLabel: '06 Thesis',
+    notes: "This is the intellectual bet we've made — and it's worth being explicit about it. Structure is not the outcome, it's the precondition. You can't insight your way out of unstructured data. You classify and link first; then reporting, automation, and exception management fall out naturally. These three principles define every design decision in the system.",
     render: () => (
       <div style={{ ...base, justifyContent: 'center' }}>
         <p style={{ ...eyebrow, margin: '0 0 36px' }}>06 — Our thesis</p>
@@ -211,6 +218,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'How it works',
     screenLabel: '07 Pipeline',
+    notes: "Five stages, one pipeline. Walk left to right — Ingest pulls from the lake in any format, Classify labels and quarantines, Extract lifts structured fields, Reconcile runs the three-way match, Insight surfaces the action queue. The confidence gate is the key: any decision the system isn't sure about routes to a human reviewer. The auto-match rate stays high precisely because we don't pretend to be confident when we're not.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>07 — How Tessera works</p>
@@ -247,6 +255,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Three-way match',
     screenLabel: '08 3-way match',
+    notes: "This is the mechanism under everything. The match engine compares line items, quantities, currencies, and tax treatment across all three documents. When they align: auto-approve. When they don't: a human gets the exception with the evidence attached — not just a flag, but the source documents side by side. The five exception types on the right are exactly what the demo will surface in a moment.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>08 — The core mechanism</p>
@@ -288,6 +297,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Where we differ',
     screenLabel: '09 Differentiation',
+    notes: "The left column is a fair description of what was built before — we're not being uncharitable, we confirmed this in due diligence. Our differentiation is operational, not just architectural: we prove first, scale second. That's the opposite of how the last engagement was structured. If the numbers don't justify Phase 2 after Phase 1, we haven't earned the contract.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>09 — Differentiation</p>
@@ -295,7 +305,7 @@ export const SLIDES: Slide[] = [
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, flex: 1 }}>
           <div style={{ ...card, padding: '38px 40px', display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-              <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#f2685f' }} />
+              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#f2685f' }} />
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 24, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9fb3a9' }}>Previous vendor</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18, fontSize: 24, color: '#9fb3a9', lineHeight: 1.35 }}>
@@ -308,7 +318,7 @@ export const SLIDES: Slide[] = [
           </div>
           <div style={{ ...card, padding: '38px 40px', display: 'flex', flexDirection: 'column', background: '#16291f', borderColor: 'rgba(47,208,138,0.35)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-              <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#2fd08a' }} />
+              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#2fd08a' }} />
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 24, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2fd08a' }}>Tessera</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18, fontSize: 24, color: '#eaf2ee', lineHeight: 1.35 }}>
@@ -326,6 +336,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Live demo',
     screenLabel: '10 Demo',
+    notes: "Hit the button. Walk through ingestion first — load the sample set and watch the classifier run live in the browser. Then go to Reconciliation, run the three-way match, and show the exception cards. Open one exception and walk through the evidence panel. Finish on the Insights action queue. If they want to try their own files, they can drop them directly — nothing leaves the browser tab.",
     render: ({ onOpenConsole }) => (
       <div style={{ ...base, background: '#2fd08a', color: '#06140e', justifyContent: 'center' }}>
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 24, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#0a3324', margin: '0 0 32px' }}>10 — Live demo</p>
@@ -349,6 +360,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Insights',
     screenLabel: '11 Insights',
+    notes: "These numbers are from the demo dataset — you'll see them live in a moment on the Insights tab. The action queue is the point: not just a dashboard, but a prioritised list of what needs a human decision today, with the value at risk attached to each item. Finance gets a single view of open exposure; procurement gets a list of vendor disputes to action.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>11 — Insights</p>
@@ -379,7 +391,7 @@ export const SLIDES: Slide[] = [
               ].map(([label, width, color, val]) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   <span style={{ width: 170 }}>{label}</span>
-                  <span style={{ height: 18, width, background: color, borderRadius: 4 }} />
+                  <span style={{ height: 18, width, background: color, borderRadius: 2 }} />
                   <span>{val}</span>
                 </div>
               ))}
@@ -410,6 +422,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Built to scale',
     screenLabel: '12 Scale',
+    notes: "The 50k/day figure is what the current architecture handles without vertical scaling. Sub-2-second classify and extract is on demo hardware — production throughput with dedicated GPU inference is faster. The key design principle worth emphasising: humans only review exceptions, not every document. Review effort stays roughly flat as volume grows, which is the only way this works at your scale.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>12 — Scalability &amp; reliability</p>
@@ -444,6 +457,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'Trust before access',
     screenLabel: '13 Trust',
+    notes: "This slide exists because of what happened before. The right order is: demonstrate value on data you trust, then earn access to the data that matters. Every claim we make in this session is verifiable — the source documents are in the console right there. Auditable decisions aren't a feature, they're the whole point: if you can't trace a match back to its documents, it isn't a match, it's a guess.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>13 — Trust</p>
@@ -468,6 +482,7 @@ export const SLIDES: Slide[] = [
   {
     label: 'The rollout',
     screenLabel: '14 Rollout',
+    notes: "Phase 0 is this session. Phase 1 is where we'd need a read-only feed from one country — no write access, no system integration, no credentials beyond a data export. We baseline against your actual data and return a match rate and value-at-risk number in two to three weeks. Phases 2 and 3 only happen if Phase 1 earns them. We put that in writing.",
     render: () => (
       <div style={base}>
         <p style={eyebrow}>14 — The rollout</p>
@@ -499,6 +514,7 @@ export const SLIDES: Slide[] = [
   {
     label: "What's next",
     screenLabel: '15 Next',
+    notes: "Close with the ask — it's deliberately small. Pick one country, give us read-only access to a month of data, and we'll return your actual match rate and value-at-risk number in two weeks. If the evidence doesn't justify Phase 2, we haven't earned it. We're not asking for the lake — we're asking for one slice, one decision, based on your own numbers.",
     render: () => (
       <div style={{ ...base, justifyContent: 'center' }}>
         <p style={{ ...eyebrow, margin: '0 0 32px' }}>15 — What happens next</p>
