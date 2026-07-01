@@ -89,8 +89,9 @@ export default function Insights({ docs, reconcileDone, onGoTo }: Props) {
   const mixBars = mixCounts.map((m) => ({ label: m.label, val: String(m.val), color: m.color, width: ((m.val / maxMix) * 100).toFixed(0) + '%' }));
 
   const actions = [...exGroups].sort((a, b) => (b.risk || 0) - (a.risk || 0)).map((g) => ({
-    impact: k(g.risk), tag: EX_LABEL[g.status].replace('✓ ', ''), text: ACTION_TEXT[g.status] || 'Review exception', vendor: g.vendor,
+    impact: k(g.risk), rawRisk: g.risk || 0, tag: EX_LABEL[g.status].replace('✓ ', ''), text: ACTION_TEXT[g.status] || 'Review exception', vendor: g.vendor,
   }));
+  const maxActionRisk = Math.max(1, ...actions.map((a) => a.rawRisk));
 
   return (
     <div>
@@ -146,19 +147,22 @@ export default function Insights({ docs, reconcileDone, onGoTo }: Props) {
         </div>
         {actions.length > 0 ? (
           <div className="flex flex-col">
-            {actions.map((a, i) => (
-              <div key={i} className="flex items-center gap-5 py-[15px] border-t border-border-soft">
+            {actions.map((a, i) => {
+              const railOpacity = 0.25 + 0.75 * (a.rawRisk / maxActionRisk);
+              return (
+              <div key={i} className="flex items-center gap-5 py-[15px] border-t border-border-soft pl-[14px]" style={{ borderLeft: `3px solid rgba(242,104,95,${railOpacity.toFixed(2)})` }}>
                 <span className="font-mono text-[16px] font-medium text-coral w-[84px] flex-shrink-0">{a.impact}</span>
                 <span
-                  className="font-mono text-[11px] tracking-[0.03em] px-[9px] py-1 rounded-[5px] whitespace-nowrap text-center flex-shrink-0"
-                  style={{ width: 150, background: 'rgba(245,185,66,0.13)', color: '#f5b942' }}
+                  className="font-mono text-[11px] tracking-[0.06em] px-[9px] py-1 rounded-[2px] whitespace-nowrap text-center flex-shrink-0"
+                  style={{ width: 150, background: 'transparent', color: '#f5b942', border: '1.5px solid rgba(245,185,66,0.45)' }}
                 >
                   {a.tag}
                 </span>
                 <span className="text-[15px] text-text flex-1 min-w-0">{a.text}</span>
                 <span className="text-[14px] text-text-2 flex-shrink-0">{a.vendor}</span>
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="text-[15px] text-text-2 py-[6px]">No open actions — all documents cleared.</div>

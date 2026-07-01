@@ -276,9 +276,9 @@ function DocTile({ doc: d, onClick }: { doc: TessDoc; onClick: () => void }) {
   let pillStyle: React.CSSProperties = {};
   let pillLabel = '';
   let metaLabel = '';
-  if (quar) { pillStyle = { background: 'rgba(255,255,255,0.05)', color: '#6f8a7e' }; pillLabel = 'Quarantined'; metaLabel = 'noise'; }
-  else if (review) { pillStyle = { background: 'rgba(245,185,66,0.14)', color: '#f5b942' }; pillLabel = TYPE_NAME[d.type!] || 'Document'; metaLabel = `${Math.round((d.confidence || 0) * 100)}% · review`; }
-  else if (isDone) { pillStyle = { background: 'rgba(47,208,138,0.12)', color: '#2fd08a' }; pillLabel = TYPE_NAME[d.type!] || 'Document'; metaLabel = `${Math.round((d.confidence || 0) * 100)}%`; }
+  if (quar) { pillStyle = { background: 'transparent', color: '#6f8a7e', border: '1px solid rgba(111,138,126,0.35)' }; pillLabel = 'Quarantined'; metaLabel = 'noise'; }
+  else if (review) { pillStyle = { background: 'transparent', color: '#f5b942', border: '1.5px solid rgba(245,185,66,0.5)' }; pillLabel = TYPE_NAME[d.type!] || 'Document'; metaLabel = `${Math.round((d.confidence || 0) * 100)}% · review`; }
+  else if (isDone) { pillStyle = { background: 'rgba(47,208,138,0.07)', color: '#2fd08a', border: '1px solid rgba(47,208,138,0.3)' }; pillLabel = TYPE_NAME[d.type!] || 'Document'; metaLabel = `${Math.round((d.confidence || 0) * 100)}%`; }
 
   let extractLine = '';
   let showExtract = false;
@@ -304,7 +304,7 @@ function DocTile({ doc: d, onClick }: { doc: TessDoc; onClick: () => void }) {
       }}
     >
       <div className="font-mono text-[13px] text-text whitespace-nowrap overflow-hidden text-ellipsis">{d.name}</div>
-      <div className="font-mono text-[11px] text-text-3">{d.source}</div>
+      <div className="font-mono text-[11px] text-text-3">← {d.source}</div>
       <div className="flex items-center gap-2 mt-[2px] min-h-[22px]">
         {isQueued && <span className="font-mono text-[11px] text-text-3">queued</span>}
         {isClassifying && (
@@ -318,7 +318,7 @@ function DocTile({ doc: d, onClick }: { doc: TessDoc; onClick: () => void }) {
         )}
         {isDone && (
           <>
-            <span className="font-mono text-[11px] tracking-[0.02em] px-2 py-[3px] rounded-[5px] whitespace-nowrap" style={pillStyle}>{pillLabel}</span>
+            <span className="font-mono text-[11px] tracking-[0.06em] px-2 py-[3px] rounded-[2px] whitespace-nowrap" style={pillStyle}>{pillLabel}</span>
             <span className="font-mono text-[11px] text-text-3">{metaLabel}</span>
           </>
         )}

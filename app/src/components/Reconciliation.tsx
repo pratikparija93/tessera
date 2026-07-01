@@ -130,11 +130,11 @@ export default function Reconciliation({
 function TxnCard({ g, resolved, resolving, open, onToggle }: { g: ReconGroup; resolved: boolean; resolving: boolean; open: boolean; onToggle: () => void }) {
   const norm = '#eaf2ee', coral = '#f2685f', faint = '#6f8a7e';
 
-  let pillBg = 'rgba(255,255,255,0.05)', pillColor = faint, pillLabel = resolving ? 'matching…' : 'pending';
+  let pillBg = 'transparent', pillColor = faint, pillBorder = 'rgba(255,255,255,0.1)', pillLabel = resolving ? 'matching…' : 'pending';
   if (resolved) {
-    if (g.status === 'matched') { pillBg = 'rgba(47,208,138,0.14)'; pillColor = '#2fd08a'; pillLabel = '✓ Matched'; }
-    else if (g.isEx) { pillBg = 'rgba(245,185,66,0.16)'; pillColor = '#f5b942'; pillLabel = EX_LABEL[g.status]; }
-    else { pillBg = 'rgba(255,255,255,0.06)'; pillColor = '#9fb3a9'; pillLabel = EX_LABEL[g.status]; }
+    if (g.status === 'matched') { pillBg = 'rgba(47,208,138,0.07)'; pillColor = '#2fd08a'; pillBorder = 'rgba(47,208,138,0.35)'; pillLabel = '✓ Matched'; }
+    else if (g.isEx) { pillBg = 'transparent'; pillColor = '#f5b942'; pillBorder = 'rgba(245,185,66,0.5)'; pillLabel = EX_LABEL[g.status]; }
+    else { pillBg = 'transparent'; pillColor = '#9fb3a9'; pillBorder = 'rgba(159,179,169,0.25)'; pillLabel = EX_LABEL[g.status]; }
   }
 
   const poCol = { label: 'Purchase order', main: g.po ? money(g.cur, g.poTotal) : 'No PO', sub: g.po ? (g.po.fields.poRef || g.ref) : 'not in this batch', flag: !g.po && resolved && g.status === 'missing_po' };
@@ -176,7 +176,7 @@ function TxnCard({ g, resolved, resolving, open, onToggle }: { g: ReconGroup; re
           <span className="font-mono text-[12px] text-text-3">{g.country}</span>
         </div>
         <div className="flex items-center gap-[14px] flex-shrink-0">
-          <span className="font-mono text-[12px] tracking-[0.03em] px-[11px] py-[5px] rounded-[6px] whitespace-nowrap" style={{ background: pillBg, color: pillColor }}>{pillLabel}</span>
+          <span className="font-mono text-[12px] tracking-[0.06em] px-[11px] py-[5px] rounded-[2px] whitespace-nowrap" style={{ background: pillBg, color: pillColor, border: `1.5px solid ${pillBorder}` }}>{pillLabel}</span>
           {canExpand && (
             <span
               className="text-[22px] inline-block transition-transform"
