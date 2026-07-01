@@ -97,7 +97,9 @@ export default function Linkage({ docs, onGoTo, onSelectDoc }: Props) {
           </p>
         </div>
         {riskTotal > 0 && (
-          <div className="font-mono text-[13px] text-coral flex-shrink-0">{k(riskTotal)} at risk across {exN} exceptions</div>
+          <div className="font-mono text-[12px] tracking-[0.05em] px-[12px] py-[6px] rounded-[2px] flex-shrink-0" style={{ color: 'var(--color-coral)', border: '1.5px solid rgba(242,104,95,0.4)', background: 'rgba(242,104,95,0.06)' }}>
+            {k(riskTotal)} AT RISK · {exN} EXCEPTIONS
+          </div>
         )}
       </div>
 
@@ -110,8 +112,8 @@ export default function Linkage({ docs, onGoTo, onSelectDoc }: Props) {
               onClick={() => setFilter(t.key)}
               className="font-mono text-[12px] tracking-[0.04em] px-[12px] py-[6px] rounded-[7px] border-none cursor-pointer transition-colors"
               style={filter === t.key
-                ? { background: 'var(--color-emerald)', color: 'var(--color-emerald-ink)' }
-                : { background: 'transparent', color: 'var(--color-text-2)' }
+                ? { background: 'transparent', color: 'var(--color-emerald)', border: '1.5px solid rgba(47,208,138,0.5)' }
+                : { background: 'transparent', color: 'var(--color-text-2)', border: '1.5px solid transparent' }
               }
             >{t.label}</button>
           ))}
@@ -148,12 +150,12 @@ export default function Linkage({ docs, onGoTo, onSelectDoc }: Props) {
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {LEGEND.map((l) => (
           <div key={l.label} className="flex items-center gap-2 font-mono text-[12px] text-text-2">
-            <span className="w-[10px] h-[10px] rounded-full" style={{ border: `2px solid ${l.color}` }} />
+            <span className="w-[8px] h-[8px] rounded-[1px] flex-shrink-0" style={{ border: `1.5px solid ${l.color}` }} />
             {l.label}
           </div>
         ))}
         <div className="flex items-center gap-2 font-mono text-[12px] text-text-2">
-          <span className="w-[10px] h-[10px] rounded-full" style={{ border: '2px solid #f2685f', background: 'rgba(242,104,95,0.16)' }} />
+          <span className="w-[8px] h-[8px] rounded-[1px] flex-shrink-0" style={{ border: '1.5px solid #f2685f', background: 'rgba(242,104,95,0.2)' }} />
           flagged / exception leg
         </div>
         {nodes.length > 50 && (

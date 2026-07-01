@@ -166,7 +166,11 @@ export default function NetworkGraph({ nodes, links, width = 760, height = 520, 
         <marker id="ng-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="rgba(255,255,255,0.25)" />
         </marker>
+        <pattern id="ng-dots" width="32" height="32" patternUnits="userSpaceOnUse">
+          <circle cx="16" cy="16" r="0.7" fill="rgba(255,255,255,0.055)" />
+        </pattern>
       </defs>
+      <rect width={width} height={height} fill="url(#ng-dots)" />
       <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
         {linksRef.current.map((l, i) => {
           const a = typeof l.source === 'object' ? (l.source as SimNode) : undefined;
