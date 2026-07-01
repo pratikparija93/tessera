@@ -136,7 +136,7 @@ export default function Architecture({ docs = [], selectedModel = 'gemma3' }: Pr
           { label: 'Runs in browser tab', color: 'var(--color-text-2)' },
           { label: 'PDF + image + text', color: 'var(--color-text-2)' },
         ].map((p) => (
-          <span key={p.label} className="font-mono text-[11px] tracking-[0.06em] px-[10px] py-[5px] rounded-full border border-white/10 bg-raised" style={{ color: p.color }}>
+          <span key={p.label} className="font-mono text-[11px] tracking-[0.06em] px-[10px] py-[5px] rounded-[2px] border border-white/10 bg-raised" style={{ color: p.color }}>
             {p.label}
           </span>
         ))}
@@ -223,7 +223,7 @@ export default function Architecture({ docs = [], selectedModel = 'gemma3' }: Pr
                   </svg>
                 </g>
                 <text x={cx + CARD_W / 2} y={CARD_Y + 56} fontFamily="Schibsted Grotesk, sans-serif" fontSize="13" fontWeight={600} fill="#eaf2ee" textAnchor="middle">{a.label}</text>
-                <rect x={cx + CARD_W / 2 - 40} y={CARD_Y + 62} width={80} height={16} rx={4}
+                <rect x={cx + CARD_W / 2 - 40} y={CARD_Y + 62} width={80} height={16} rx={2}
                   fill={cfg.id === 'policy' ? 'rgba(242,104,95,0.12)' : cfg.color === '#2fd08a' ? 'rgba(47,208,138,0.12)' : 'rgba(111,138,126,0.12)'}
                   stroke={cfg.id === 'policy' ? 'rgba(242,104,95,0.3)' : cfg.color === '#2fd08a' ? 'rgba(47,208,138,0.3)' : 'rgba(111,138,126,0.25)'}
                   strokeWidth={0.8}
@@ -275,7 +275,7 @@ export default function Architecture({ docs = [], selectedModel = 'gemma3' }: Pr
       <div className="bg-surface border border-border-soft rounded-[14px] p-[24px_26px]">
         <div className="flex items-center gap-3 mb-1">
           <h2 className="text-[18px] font-semibold tracking-[-0.01em]">Tessera Analyst</h2>
-          <span className="font-mono text-[10px] tracking-[0.1em] px-[7px] py-[3px] rounded border" style={{ color: 'var(--color-emerald)', borderColor: 'rgba(47,208,138,0.3)', background: 'rgba(47,208,138,0.07)' }}>LLM AGENT</span>
+          <span className="font-mono text-[10px] tracking-[0.1em] px-[7px] py-[3px] rounded-[2px] border" style={{ color: 'var(--color-emerald)', borderColor: 'rgba(47,208,138,0.3)', background: 'rgba(47,208,138,0.07)' }}>LLM AGENT</span>
         </div>
         <p className="text-[13px] text-text-3 mb-5">
           Ask anything about the batch. Use <span className="font-mono text-text-2">@PO-4471</span> or <span className="font-mono text-text-2">@Rhein</span> to focus context on a specific document or vendor.
@@ -305,7 +305,7 @@ export default function Architecture({ docs = [], selectedModel = 'gemma3' }: Pr
                 {n.label.split('\n').map((line, li) => (
                   <text key={li} x={x + TN_W / 2} y={24 + li * 16} fontFamily="Schibsted Grotesk, sans-serif" fontSize="13" fontWeight={600} fill={n.color} textAnchor="middle">{line}</text>
                 ))}
-                <text x={x + TN_W / 2} y={TN_H - 8} fontFamily="JetBrains Mono, monospace" fontSize="9" fill={n.color} textAnchor="middle" opacity="0.55">{n.sub.split(' · ')[0]}</text>
+                <text x={x + TN_W / 2} y={TN_H - 8} fontFamily="JetBrains Mono, monospace" fontSize="9" fill={n.color} textAnchor="middle" opacity="0.7">{n.sub.split(' · ')[0]}</text>
               </g>
             );
           })}
