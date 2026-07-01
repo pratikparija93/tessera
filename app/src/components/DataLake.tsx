@@ -93,24 +93,25 @@ export default function DataLake({
           <p className="text-[16px] text-text-2">{lakeSub}</p>
         </div>
         {showIngestBtn && (
-          <div className="flex gap-3">
-            <button
-              onClick={ingestRunning || queued === 0 ? undefined : onRunIngest}
-              className="font-mono text-[13px] font-medium tracking-[0.05em] px-[22px] py-[13px] rounded-[9px] border-none"
-              style={
-                ingestRunning
-                  ? { background: 'var(--color-raised)', color: 'var(--color-emerald)', cursor: 'default' }
-                  : queued > 0
-                  ? { background: 'var(--color-emerald)', color: 'var(--color-emerald-ink)', cursor: 'pointer' }
-                  : { background: 'rgba(47,208,138,0.12)', color: 'var(--color-emerald)', cursor: 'default' }
-              }
-            >
-              {ingestRunning
-                ? `CLASSIFYING ${doneCount} / ${total}…`
-                : queued > 0
-                ? `▶  RUN CLASSIFICATION (${queued})`
-                : '✓  CLASSIFICATION COMPLETE'}
-            </button>
+          <div className="flex items-center gap-3">
+            {queued > 0 || ingestRunning ? (
+              <button
+                onClick={ingestRunning ? undefined : onRunIngest}
+                className="font-mono text-[13px] font-medium tracking-[0.05em] px-[22px] py-[13px] rounded-[9px] border-none"
+                style={
+                  ingestRunning
+                    ? { background: 'var(--color-raised)', color: 'var(--color-emerald)', cursor: 'default' }
+                    : { background: 'var(--color-emerald)', color: 'var(--color-emerald-ink)', cursor: 'pointer' }
+                }
+              >
+                {ingestRunning ? `CLASSIFYING ${doneCount} / ${total}…` : `▶  RUN CLASSIFICATION (${queued})`}
+              </button>
+            ) : (
+              <div className="flex items-center gap-[8px] font-mono text-[12px] tracking-[0.06em]" style={{ color: 'var(--color-emerald)' }}>
+                <span className="w-[7px] h-[7px] rounded-full bg-emerald flex-shrink-0" style={{ boxShadow: '0 0 0 3px rgba(47,208,138,0.15)' }} />
+                {doneCount} DOCS CLASSIFIED
+              </div>
+            )}
             {ingestRunning && (
               <button
                 onClick={onStopIngest}
@@ -184,7 +185,7 @@ export default function DataLake({
 
       {total > 0 && (
         <div>
-          <div className="grid grid-cols-4 gap-4 my-6">
+          <div className="grid grid-cols-5 gap-4 my-6">
             {lakeStats.map((s) => (
               <div
                 key={s.key}

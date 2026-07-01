@@ -31,7 +31,14 @@ export default function Insights({ docs, reconcileDone, onGoTo }: Props) {
   if (!reconcileDone) {
     return (
       <div className="flex flex-col items-center justify-center text-center p-[120px_20px]">
-        <div className="w-[52px] h-[52px] rounded-[14px] bg-surface border border-white/8 flex items-center justify-center text-[24px] text-text-3 mb-[22px]">&#9650;</div>
+        <div className="w-[52px] h-[52px] rounded-[14px] bg-surface border border-white/8 flex items-center justify-center mb-[22px]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+            <line x1="2" y1="20" x2="22" y2="20" />
+          </svg>
+        </div>
         <h2 className="text-[26px] font-semibold mb-[10px]">Run reconciliation to unlock insights</h2>
         <p className="text-[16px] text-text-2 mb-[26px] max-w-[460px]">
           Insights are generated from matched documents and surfaced exceptions. Complete the three-way match first.

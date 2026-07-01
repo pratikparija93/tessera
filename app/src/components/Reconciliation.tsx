@@ -97,14 +97,17 @@ export default function Reconciliation({
         <div className="bg-surface border border-border-soft rounded-[12px] p-[20px_22px]">
           <div className="font-mono text-[30px] font-medium text-emerald">{reconcileDone ? matchedN : '—'}</div>
           <div className="text-[14px] text-text-2 mt-[6px]">matched &amp; cleared</div>
+          {!reconcileDone && <div className="font-mono text-[10px] text-text-3 mt-[8px] tracking-[0.06em]">run to reveal</div>}
         </div>
         <div className="bg-surface border border-border-soft rounded-[12px] p-[20px_22px]">
           <div className="font-mono text-[30px] font-medium text-amber">{reconcileDone ? exN : '—'}</div>
           <div className="text-[14px] text-text-2 mt-[6px]">exceptions flagged</div>
+          {!reconcileDone && <div className="font-mono text-[10px] text-text-3 mt-[8px] tracking-[0.06em]">run to reveal</div>}
         </div>
         <div className="bg-surface border border-border-soft rounded-[12px] p-[20px_22px]">
           <div className="font-mono text-[30px] font-medium text-coral">{reconcileDone ? k(riskTotal) : '—'}</div>
           <div className="text-[14px] text-text-2 mt-[6px]">value at risk surfaced</div>
+          {!reconcileDone && <div className="font-mono text-[10px] text-text-3 mt-[8px] tracking-[0.06em]">run to reveal</div>}
         </div>
       </div>
 

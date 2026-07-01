@@ -78,8 +78,7 @@ export default function Sidebar({ view, lakeDone, reconcileDone, llmName, llmWar
 
       <div className="mt-auto flex flex-col gap-3">
         <div
-          className="p-[14px] bg-surface border rounded-[10px]"
-          style={{ borderColor: llmWarning ? 'var(--color-coral)' : 'var(--color-border-soft)' }}
+          className="p-[14px] bg-surface border border-border-soft rounded-[10px]"
         >
           <div className="font-mono text-[10px] tracking-[0.1em] text-text-3 mb-[8px]">LOCAL MODEL</div>
           {availableModels.length > 0 ? (
@@ -100,8 +99,8 @@ export default function Sidebar({ view, lakeDone, reconcileDone, llmName, llmWar
             <div className="font-mono text-[13px] text-text-soft">{llmName}</div>
           )}
           {llmWarning && (
-            <div className="mt-[8px] text-[12px] leading-[1.4]" style={{ color: 'var(--color-coral)' }}>
-              ⚠ {llmWarning}
+            <div className="mt-[6px] font-mono text-[10px] leading-[1.4] text-text-3">
+              ⚠ model not found in ollama
             </div>
           )}
           {availableModels.length > 0 && !llmWarning && (
