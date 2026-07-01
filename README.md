@@ -1,4 +1,4 @@
-# Handoff: Tessera — Purchase Order & Invoice Management
+# Tessera — Purchase Order & Invoice Management
 
 > **Read this first.** The files in `reference/` are **design + behavior references built in HTML** — working prototypes that show the intended look, data model, and logic. They are **not** the production code to ship. Your job is to **recreate this app in a real codebase** (recommended: Vite + React + TypeScript + Tailwind) using the architecture and exact values documented here. The prototype's classification engine already calls a **local LLM (Gemma via Ollama)** with no API keys — preserve that.
 
